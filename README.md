@@ -4,7 +4,7 @@
 Microservicio para el [Curso de desarrollo para asegurar la calidad del software](https://jj.github.io/curso-tdd/) que se encarga de proveer una API sencilla para obtener datos medioambientales de varias ciudades de España.
 
 ## Historias de usuario
-Las historias de usuario del proyecto estan disponibles [aquí]().
+Las historias de usuario del proyecto estan disponibles [aquí](https://github.com/medioambiental-tdd/medioambiental/blob/master/HU/HU.md).
 
 ## Herramientas a utilizar
 
