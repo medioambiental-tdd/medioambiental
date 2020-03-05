@@ -1,0 +1,31 @@
+{
+  "name": "medioambiental",
+  "version": "0.0.1",
+  "description": "Proyecto para curso-tdd",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/medioambiental-tdd/medioambiental.git"
+  },
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/medioambiental-tdd/medioambiental/issues"
+  },
+  "homepage": "https://github.com/medioambiental-tdd/medioambiental#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.0",
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2"
+  }
+}
