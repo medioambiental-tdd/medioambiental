@@ -15,3 +15,12 @@ function prediccion_meteo(municipio, dia){
     return json;
 }
 
+function prediccion_meteo_textual(zona,dia){
+    var json = {
+        "zona" : "Granada",
+        "prediccion": "texto"
+    };
+
+    return json;
+
+}
