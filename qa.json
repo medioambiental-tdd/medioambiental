@@ -1,0 +1,5 @@
+{
+    "lenguaje" : "javascript",
+    "build" : "package.json",
+    "clase" : "src/model/MeteoMunicipio.js"
+}
