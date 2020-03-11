@@ -1,7 +1,7 @@
 class MeteoCosta{
     constructor(){
-        this.nombrePlaya;
-        this.codigo;
+        this.nombrePlaya=null;
+        this.codigo=null;
         this.estado_cielo=null;
         this.viento=null;
         this.oleaje=null;

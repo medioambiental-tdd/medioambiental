@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // variables de entorno
 require('dotenv').config();
 const fetch = require('node-fetch');
@@ -6,9 +5,6 @@ const API_KEY = process.env.AEMET_API_KEY;
 
 
 function get_prediccion_municipio(municipio, dia){
-=======
-function get_prediccion_municipio(codigoMunicipio, dia){
->>>>>>> ad8d644cd5895a44940c2173ce4bdca704edd6f7
     var json = {};
 
     // ...
@@ -50,11 +46,8 @@ function get_prediccion_montaña(area, dia){
     // convertir a clase Meteo
 }
 
-<<<<<<< HEAD
 module.exports = get_prediccion_textual
-=======
 function get_Riesgo_Incendio(){
 
 
 }_
->>>>>>> ad8d644cd5895a44940c2173ce4bdca704edd6f7
