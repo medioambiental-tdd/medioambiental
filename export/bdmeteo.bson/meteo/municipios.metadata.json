@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"meteo.municipios"}],"uuid":"09bcc3d7cf234c548429017f780d8ffd"}
