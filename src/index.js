@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 app.get('/tiempo/:municipio/:dia',(req,res) =>{
-    MeteoMunicipio m1 = new MeteoMunicipio();
+    m1 = new MeteoMunicipio();
     m1.pedirDatosMunicipio();
 
     // convertir a JSON
