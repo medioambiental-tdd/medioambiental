@@ -1,6 +1,8 @@
-class MeteoMunicipio{
+    class MeteoMunicipio{
     
     constructor(){
+        this.nombreMunicipio=null;
+        this.codigoMunicipio=null;
         this.estado_cielo=null;
         this.prob_precipitacion=null;
         this.prob_nieve=null;
@@ -12,8 +14,14 @@ class MeteoMunicipio{
         this.ocaso=null;
     }
 
+    comprobarExisteMunicipio(Municipio){
+        
+    }
 
    pedirDatosMunicipio(Municipio,dia){
+       //Comprobamos que existe el municipio
+
+
         //Pedimos los datos a la API de AEMET.
        var json=get_prediccion_municipio(Municipio,dia);
 
@@ -57,6 +65,13 @@ class MeteoMunicipio{
 
     }
 
+    getNombreMunicipio(){
+
+    }
+
+    getCodigoMunicipio(){
+
+    }
 
 
 
