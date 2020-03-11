@@ -47,7 +47,7 @@ function get_prediccion_montaña(area, dia){
 }
 
 module.exports = get_prediccion_textual
+
 function get_Riesgo_Incendio(){
 
-
-}_
+}
