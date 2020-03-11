@@ -107,3 +107,6 @@ venv.bak/
 
 #ignorar modulos de npm
 node_modules
+
+# ignorar variables de entorno
+*.env
