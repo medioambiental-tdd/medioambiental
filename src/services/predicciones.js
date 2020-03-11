@@ -1,4 +1,4 @@
-function get_prediccion_municipio(municipio, dia){
+function get_prediccion_municipio(codigoMunicipio, dia){
     var json = {};
 
     // ...
@@ -37,3 +37,8 @@ function get_prediccion_montaña(area, dia){
 
     // convertir a clase Meteo
 }
+
+function get_Riesgo_Incendio(){
+
+
+}_
