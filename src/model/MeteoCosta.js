@@ -8,6 +8,7 @@ class MeteoCosta{
         this.temp_agua=null;
         this.provincia=null;
         this.playa=null;
+        this.fecha=null;
     }
 
     ComprobarExistePlaya(NombrePlaya){

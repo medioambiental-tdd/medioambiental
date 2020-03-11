@@ -4,6 +4,7 @@ class RiesgoIncendio{
         this.zona=null;
         this.grafico=null;
         this.codigo=null;
+        this.fecha=null;
     }
 
     ComprobarExisteZona(){

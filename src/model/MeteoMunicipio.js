@@ -12,6 +12,7 @@
         this.dir_viento=null;
         this.amanecer=null;
         this.ocaso=null;
+        this.fecha=null;
     }
 
     comprobarExisteMunicipio(Municipio){
