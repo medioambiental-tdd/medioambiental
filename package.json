@@ -21,8 +21,12 @@
   },
   "homepage": "https://github.com/medioambiental-tdd/medioambiental#readme",
   "dependencies": {
+    "chai": "^4.2.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongodb": "^3.5.4"
+    "mongodb": "^3.5.4",
+    "node-fetch": "^2.6.0",
+    "sqlite": "^3.0.3"
   },
   "devDependencies": {
     "mocha": "^7.1.0",
