@@ -3,7 +3,6 @@ require('dotenv').config();
 const fetch = require('node-fetch');
 const API_KEY = process.env.AEMET_API_KEY;
 
-
 function get_prediccion_municipio(municipio, dia){
     var json = {};
 
@@ -14,14 +13,22 @@ function get_prediccion_municipio(municipio, dia){
     // convertir a clase Meteo
 }
 
-async function get_prediccion_textual(zona,dia){
-    const URL = 'https://opendata.aemet.es/opendata/api/prediccion/' + zona + '/' + dia + '/?api_key=' + API_KEY;
+async function get_prediccion_textual(zona){
+    const URL = 'https://opendata.aemet.es/opendata/api/prediccion/ccaa' + '/hoy/' + zona + '/?api_key=' + API_KEY;
 
-    const respuesta = await fetch(URL);
-    const json = await respuesta.json();
+    try{
+        var respuesta = await fetch(URL);
+        var json = await respuesta.json();
+    
+        if(!json.datos){
+            throw new Error('Error en la URL para la petición');
+        }
 
-    const resp = await fetch(json.datos);
-    const datos = await resp.text();
+        var resp = await fetch(json.datos);
+        var datos = await resp.text();
+    }catch(error){
+        throw error;
+    }
 
     return datos;
 }
@@ -46,8 +53,15 @@ function get_prediccion_montaña(area, dia){
     // convertir a clase Meteo
 }
 
-module.exports = get_prediccion_textual
 
 function get_Riesgo_Incendio(){
 
+}
+
+module.exports = {
+    get_prediccion_textual,
+    get_prediccion_municipio,
+    get_prediccion_costa,
+    get_prediccion_montaña,
+    get_Riesgo_Incendio
 }

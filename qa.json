@@ -1,5 +1,6 @@
 {
     "lenguaje" : "javascript",
     "build" : "package.json",
-    "clase" : "src/model/MeteoMunicipio.js"
+    "clase" : "src/model/MeteoMunicipio.js",
+    "test"  : "test/operaciones.test.js"
 }
