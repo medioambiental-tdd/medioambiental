@@ -1,5 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
+var chaiAsPromised = require("chai-as-promised");
+chai.use(chaiAsPromised);
 const predicciones  = require('../src/services/predicciones');
 
 describe('Tests unitarios para las llamadas a APIs externas', function(){
@@ -13,6 +15,6 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
     });
 
     it('Debería lanzar una excepcion si el código de ccaa es erróneo', async() =>{
-        expect(await predicciones.get_prediccion_textual("aaa")).to.throw;
+        await expect(predicciones.get_prediccion_textual("aaa")).to.be.rejectedWith(Error);
     });
 });
