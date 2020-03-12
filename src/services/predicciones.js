@@ -20,6 +20,10 @@ async function get_prediccion_textual(zona){
         var respuesta = await fetch(URL);
         var json = await respuesta.json();
     
+        if(!json.datos){
+            throw new Error('Error en la URL para la petición');
+        }
+
         var resp = await fetch(json.datos);
         var datos = await resp.text();
     }catch(error){
