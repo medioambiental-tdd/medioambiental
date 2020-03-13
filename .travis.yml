@@ -3,4 +3,5 @@ node_js:
         - "lts/*"
         - "node"
         
-script: /bin/true
+after_success: 
+        - npm test
