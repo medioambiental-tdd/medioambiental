@@ -1,10 +1,9 @@
 // variables de entorno
 require('dotenv').config();
-const fetch = require('node-fetch');
 const API_KEY = process.env.AEMET_API_KEY;
+const MeteoTextual = require('../model/MeteoTextual')
 
 function get_prediccion_municipio(municipio, dia){
-    var json = {};
 
     // ...
     // lógica de API externa
@@ -13,28 +12,19 @@ function get_prediccion_municipio(municipio, dia){
     // convertir a clase Meteo
 }
 
-async function get_prediccion_textual(zona){
+async function get_prediccion_textual(zona, get_datos){
     const URL = 'https://opendata.aemet.es/opendata/api/prediccion/ccaa' + '/hoy/' + zona + '/?api_key=' + API_KEY;
 
-    try{
-        var respuesta = await fetch(URL);
-        var json = await respuesta.json();
-    
-        if(!json.datos){
-            throw new Error('Error en la URL para la petición');
-        }
+    var datos = await get_datos(URL);
+    var texto = await datos.text();
 
-        var resp = await fetch(json.datos);
-        var datos = await resp.text();
-    }catch(error){
-        throw error;
-    }
+    var fecha = new Date().toJSON().slice(0,10);
+    mt = new MeteoTextual(zona,fecha,texto);
 
-    return datos;
+    return mt;
 }
 
 function get_prediccion_costa(provincia,playa){
-    var json = {};
 
     // ...
     // lógica de API externa
@@ -44,7 +34,6 @@ function get_prediccion_costa(provincia,playa){
 }
 
 function get_prediccion_montaña(area, dia){
-    var json = {};
 
     // ...
     // lógica de API externa
