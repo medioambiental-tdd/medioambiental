@@ -1,18 +1,21 @@
-const predicciones  = require('../services/predicciones');
-
 class MeteoTextual{
-    constructor(zona, dia){
+    constructor(zona, dia, texto){
         this.zona = zona;
         this.dia = dia;
-
-        this.pedirDatosTextual();
+        this.texto = texto;
     }
 
-    pedirDatosTextual(){
-        (async () => {
-            this.texto = await predicciones(this.zona,this.dia);
-        })()
+    getZona(){
+        return this.zona;
+    }
+
+    getDia(){
+        return this.dia;
+    }
+
+    getTexto(){
+        return this.texto;
     }
 }
 
-mt = new MeteoTextual("nacional","hoy");
+module.exports = MeteoTextual;
