@@ -5,10 +5,10 @@
   "main": "index.js",
   "directories": {
     "doc": "docs",
-    "test": "tests"
+    "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "nyc mocha"
   },
   "repository": {
     "type": "git",
@@ -22,11 +22,12 @@
   "homepage": "https://github.com/medioambiental-tdd/medioambiental#readme",
   "dependencies": {
     "chai": "^4.2.0",
-    "dotenv": "^8.2.0",
     "chai-as-promised": "^7.1.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongodb": "^3.5.4",
+    "mongodb": "^3.5.5",
     "node-fetch": "^2.6.0",
+    "nyc": "^15.0.0",
     "sqlite": "^3.0.3"
   },
   "devDependencies": {
