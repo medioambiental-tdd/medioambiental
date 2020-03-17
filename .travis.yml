@@ -1,10 +1,19 @@
+script: 'true'
+
 language: node_js
+
 node_js:
-        - "lts/*"
-        - "node"
+    - "lts/*"
+    - "node"
 install:
-        npm install -g nyc
-        npm install -g codecov
+    - npm install -g codecov
+    - npm ci
+    - grunt doc
+
 after_success:
-        - npm run report-coverage
-        - codecov
+    - npm test
+    - npm run report-coverage
+    - codecov
+
+directories:
+    - "node_modules"
