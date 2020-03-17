@@ -21,10 +21,11 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
 
     it('Debería devolver un objeto de la clase MeteoTextual con datos válidos', async() =>{
         mt = await predicciones.get_prediccion_textual('and',peticiones.get_datos_api_externa);
+        var hoy = new Date().toJSON().slice(0,10);
 
         expect(mt).to.be.an.instanceof(MeteoTextual);
         expect(mt.getZona()).to.equal('and');
-        expect(mt.getDia()).to.be.a('string');
+        expect(mt.getDia()).to.equal(hoy);
         expect(mt.getTexto()).to.be.a('string');
     });
 });
