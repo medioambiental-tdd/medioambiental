@@ -7,7 +7,7 @@ var operaciones = require('./model/operaciones')
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-app.get('/tiempo/:municipio/:test?',(req,res) =>{
+app.get('/tiempo/:municipio',(req,res) =>{
     operaciones.getDatoTextual(req.params.municipio,function(mt){
         var json = {
             zona: mt.getZona(),
