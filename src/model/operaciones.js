@@ -73,6 +73,17 @@ function obtenerDatosTextual(callback){
     });
 }
 
+function getDatoMunicipio(municipio,callback){
+    db.conn.all('SELECT * FROM municipios WHERE nombreMunicipio= ?',[municipio],(err, rows) =>{
+        if (err) 
+        throw err;
+    else
+    mm = new MeteoTextual(rows[0].zona, rows[0].fecha, rows[0].texto);
+
+        return callback(rows);
+});
+}
+
 module.exports = {
     comprobarDatosTextual,
     actualizarDatosTextual,

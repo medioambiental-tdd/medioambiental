@@ -15,63 +15,50 @@
         this.fecha=null;
     }
 
-    comprobarExisteMunicipio(Municipio){
-        
-    }
-
-   pedirDatosMunicipio(Municipio,dia){
-       //Comprobamos que existe el municipio
-
-
-        //Pedimos los datos a la API de AEMET.
-       var json=get_prediccion_municipio(Municipio,dia);
-
-        //Extraemos los datos
-        
-    }
+    
 
     getEstadoCielo(){
-        
+        return this.estado_cielo;
     }
 
     getProbPrecipitacion(){
-
+        return this.prob_precipitacion;
     }
 
     getProbNieve(){
-
+        return this.prob_nieve;
     }
 
     getTemperatura(){
-
+        return this.temperatura;
     }
 
     getSensacionTermica(){
-
+        return this.sensacion_termica;
     }
 
     getVelocidadViento(){
-
+        return this.velocidad_viento;
     }
 
     getDireccionViento(){
-
+        return this.dir_viento;
     }
 
     getAmanecer(){
-
+        return this.amanecer;
     }
 
     getOcaso(){
-
+        return this.ocaso;
     }
 
     getNombreMunicipio(){
-
+        return this.nombreMunicipio;
     }
 
     getCodigoMunicipio(){
-
+        return this.codigoMunicipio;
     }
 
 
