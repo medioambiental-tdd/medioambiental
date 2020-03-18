@@ -1,5 +1,5 @@
-var request = require('supertest');
-app = require('../src/index');
+const request = require('supertest');
+app = require('../src/mocks/index');
 
 describe("peticiones GET", function(){
     it('deberia recibir información textual de una comunidad autónoma', function(done){

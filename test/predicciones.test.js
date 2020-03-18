@@ -3,7 +3,7 @@ const expect = chai.expect;
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 const predicciones  = require('../src/services/predicciones');
-const peticiones = require('../src/services/peticiones_mock');
+const peticiones = require('../src/mocks/peticiones');
 const MeteoTextual = require('../src/model/MeteoTextual');
 
 describe('Tests unitarios para las llamadas a APIs externas', function(){
