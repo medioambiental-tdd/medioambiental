@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "nyc mocha --exit",
-    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov"
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov",
+    "start": "nodemon ./src/index.js"
   },
   "repository": {
     "type": "git",

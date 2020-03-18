@@ -1,6 +1,8 @@
 const DB = require('./db');
 const db = new DB('data/database.sqlite3');
 const predicciones  = require('../services/predicciones');
+const peticiones = require('../services/peticiones');
+const MeteoTextual = require('./MeteoTextual');
 
 function comprobarDatosTextual(){
     db.conn.all('SELECT fecha FROM textual WHERE fecha = (SELECT MIN(fecha) FROM textual)',(err, rows) => {
@@ -26,8 +28,8 @@ function actualizarDatosTextual(){
                     throw err;
                 else{
                     rows.forEach( async (row) => {
-                        var datos = await predicciones.get_prediccion_textual(row.codigo);
-                        insertarDatosTextual(row.nombre,datos);
+                        var datos = await predicciones.get_prediccion_textual(row.codigo,peticiones.get_datos_api_externa);
+                        insertarDatosTextual(row.nombre,datos.getTexto());
                     });
                 }
             });
@@ -50,6 +52,17 @@ function eliminarDatosTextual(zona){
     })
 }
 
+function getDatoTextual(zona, callback){
+    db.conn.all('SELECT * FROM textual WHERE zona= ?',[zona],(err, rows) =>{
+        if(err)
+            throw err;
+        else{
+            mt = new MeteoTextual(rows[0].zona, rows[0].fecha, rows[0].texto);
+
+            return callback(mt);
+        }
+    })
+}
 
 function obtenerDatosTextual(callback){
     db.conn.all('SELECT zona,texto FROM textual',(err, rows) => {
@@ -65,5 +78,6 @@ module.exports = {
     actualizarDatosTextual,
     obtenerDatosTextual,
     insertarDatosTextual,
-    eliminarDatosTextual
+    eliminarDatosTextual,
+    getDatoTextual
 }
