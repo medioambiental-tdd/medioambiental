@@ -72,18 +72,18 @@ function obtenerDatosTextual(callback){
             return callback(rows);
     });
 }
-/*
+
 function getDatoMunicipio(municipio,callback){
     db.conn.all('SELECT * FROM municipios WHERE nombreMunicipio= ?',[municipio],(err, rows) =>{
         if (err) 
         throw err;
     else
-    mm = new MeteoTextual(rows[0].zona, rows[0].fecha, rows[0].texto);
+    mm = new MeteoMunicipio(rows[0].nombreMunicipio, rows[0].fecha, rows[0].estadoCielo, rows[0].probPrecipitacion, rows[0].probNieve, rows[0].temperatura, rows[0].sensacionTermica, rows[0].VelocidadViento, rows[0].direccionViento, rows[0].amanecer, rows[0].ocaso);
 
-        return callback(rows);
+        return callback(mm);
 });
-}*/
-/*
+}
+
 function comprobarDatosMunicipio(){
     db.conn.all('SELECT fecha FROM municipios WHERE fecha = (SELECT MIN(fecha) FROM municipios)',(err, rows) => {
         if (err) 
@@ -96,8 +96,8 @@ function comprobarDatosMunicipio(){
             }
         }
     });
-}*/
-/*
+}
+
 function actualizarDatosMunicipio(){
     db.conn.run(`DELETE FROM municipios`,(err) =>{
         if(err)
@@ -116,7 +116,7 @@ function actualizarDatosMunicipio(){
         }
     });
 }
-*/
+
 module.exports = {
     comprobarDatosTextual,
     actualizarDatosTextual,

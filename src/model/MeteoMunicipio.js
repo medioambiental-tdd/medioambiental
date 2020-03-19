@@ -1,70 +1,57 @@
     class MeteoMunicipio{
     
-    constructor(){
-       /* this.nombreMunicipio=null;
-        this.codigoMunicipio=null;
-        this.estado_cielo=null;
-        this.prob_precipitacion=null;
-        this.prob_nieve=null;
-        this.temperatura=null;
-        this.sensacion_termica=null;
-        this.velocidad_viento=null;
-        this.dir_viento=null;
-        this.amanecer=null;
-        this.ocaso=null;
-        this.fecha=null;*/
+    constructor(nombre,fecha,estadoCielo,probPrecipitacion,cotaNieve,temperatura,sensacionTermica,velocidadViento,direccionViento){
+        this.nombreMunicipio=nombre;
+        this.estado_cielo=estadoCielo;
+        this.prob_precipitacion=probPrecipitacion;
+        this.cota_nieve=cotaNieve;
+        this.temperatura=temperatura;
+        this.sensacion_termica=sensacionTermica;
+        this.velocidad_viento=velocidadViento;
+        this.dir_viento=direccionViento;
+        this.fecha=fecha;
     }
 
     
 
     getEstadoCielo(){
-       // return this.estado_cielo;
+        return this.estado_cielo;
     }
 
     getProbPrecipitacion(){
-       // return this.prob_precipitacion;
+       return this.prob_precipitacion;
     }
 
-    getProbNieve(){
-       // return this.prob_nieve;
+    getCotaNieve(){
+        return this.cota_nieve;
     }
 
     getTemperatura(){
-        //return this.temperatura;
+        return this.temperatura;
     }
 
     getSensacionTermica(){
-       // return this.sensacion_termica;
+        return this.sensacion_termica;
     }
 
     getVelocidadViento(){
-       // return this.velocidad_viento;
+        return this.velocidad_viento;
     }
 
     getDireccionViento(){
-       // return this.dir_viento;
-    }
-
-    getAmanecer(){
-      //  return this.amanecer;
-    }
-
-    getOcaso(){
-        //return this.ocaso;
+        return this.dir_viento;
     }
 
     getNombreMunicipio(){
-        //return this.nombreMunicipio;
-    }
-
-    getCodigoMunicipio(){
-        //return this.codigoMunicipio;
+        return this.nombreMunicipio;
     }
 
     getFecha(){
-        //return this.fecha;
+        return this.fecha;
     }
 
 
 
 }
+
+module.exports = MeteoMunicipio;
