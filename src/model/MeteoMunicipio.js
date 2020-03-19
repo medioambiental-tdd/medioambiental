@@ -1,7 +1,7 @@
     class MeteoMunicipio{
     
     constructor(){
-        this.nombreMunicipio=null;
+       /* this.nombreMunicipio=null;
         this.codigoMunicipio=null;
         this.estado_cielo=null;
         this.prob_precipitacion=null;
@@ -12,53 +12,57 @@
         this.dir_viento=null;
         this.amanecer=null;
         this.ocaso=null;
-        this.fecha=null;
+        this.fecha=null;*/
     }
 
     
 
     getEstadoCielo(){
-        return this.estado_cielo;
+       // return this.estado_cielo;
     }
 
     getProbPrecipitacion(){
-        return this.prob_precipitacion;
+       // return this.prob_precipitacion;
     }
 
     getProbNieve(){
-        return this.prob_nieve;
+       // return this.prob_nieve;
     }
 
     getTemperatura(){
-        return this.temperatura;
+        //return this.temperatura;
     }
 
     getSensacionTermica(){
-        return this.sensacion_termica;
+       // return this.sensacion_termica;
     }
 
     getVelocidadViento(){
-        return this.velocidad_viento;
+       // return this.velocidad_viento;
     }
 
     getDireccionViento(){
-        return this.dir_viento;
+       // return this.dir_viento;
     }
 
     getAmanecer(){
-        return this.amanecer;
+      //  return this.amanecer;
     }
 
     getOcaso(){
-        return this.ocaso;
+        //return this.ocaso;
     }
 
     getNombreMunicipio(){
-        return this.nombreMunicipio;
+        //return this.nombreMunicipio;
     }
 
     getCodigoMunicipio(){
-        return this.codigoMunicipio;
+        //return this.codigoMunicipio;
+    }
+
+    getFecha(){
+        //return this.fecha;
     }
 
 

@@ -72,7 +72,7 @@ function obtenerDatosTextual(callback){
             return callback(rows);
     });
 }
-
+/*
 function getDatoMunicipio(municipio,callback){
     db.conn.all('SELECT * FROM municipios WHERE nombreMunicipio= ?',[municipio],(err, rows) =>{
         if (err) 
@@ -82,8 +82,41 @@ function getDatoMunicipio(municipio,callback){
 
         return callback(rows);
 });
-}
+}*/
+/*
+function comprobarDatosMunicipio(){
+    db.conn.all('SELECT fecha FROM municipios WHERE fecha = (SELECT MIN(fecha) FROM municipios)',(err, rows) => {
+        if (err) 
+            throw err;
+        else{
+            var fecha = new Date().toJSON().slice(0,10);
 
+            if(fecha != rows[0].fecha){
+                actualizarDatosMunicipios();
+            }
+        }
+    });
+}*/
+/*
+function actualizarDatosMunicipio(){
+    db.conn.run(`DELETE FROM municipios`,(err) =>{
+        if(err)
+            throw err;
+        else{
+            db.conn.all(`SELECT CPRO,CMUN FROM codMunicipios`,(err,rows) =>{
+                if(err)
+                    throw err;
+                else{
+                    rows.forEach( async (row) => {
+                        var datos = await predicciones.get_prediccion_textual(row.codigo,peticiones.get_datos_api_externa);
+                        insertarDatosTextual(row.nombre,datos.getTexto());
+                    });
+                }
+            });
+        }
+    });
+}
+*/
 module.exports = {
     comprobarDatosTextual,
     actualizarDatosTextual,

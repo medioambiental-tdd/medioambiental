@@ -3,7 +3,8 @@ require('dotenv').config();
 const API_KEY = process.env.AEMET_API_KEY;
 const MeteoTextual = require('../model/MeteoTextual')
 
-function get_prediccion_municipio(municipio, dia){
+function get_prediccion_municipio(municipio){
+   // const URL = 'https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/'+municipio+'/?api_key=' + API_KEY;
 
     // ...
     // lógica de API externa
