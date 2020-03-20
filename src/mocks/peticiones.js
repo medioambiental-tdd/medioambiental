@@ -11,7 +11,7 @@ var datosMunicipio={
 
     json(){
         return  [ {
-            "elaborado" : "2020-03-19T11:45:02",
+            "elaborado" : new Date().toJSON().slice(0,10),
             "nombre" : "Granada",
             "provincia" : "Granada",
             "prediccion" : {
@@ -170,10 +170,11 @@ function get_datos_api_externa(URL){
 
 function get_datos_api_externa_municipio(URL){
     // segun URL devolver datos diferentes
-
+   
     return datosMunicipio;
 }
 
 module.exports = {
-    get_datos_api_externa
+    get_datos_api_externa,
+    get_datos_api_externa_municipio
 }
