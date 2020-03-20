@@ -29,8 +29,4 @@ describe("peticiones GET", function(){
             });
           
     });
-
 });
-
-
-   

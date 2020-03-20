@@ -48,6 +48,5 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
         expect(mm.getSensacionTermica()).to.have.lengthOf(4);
         expect(mm.getVelocidadViento()).to.have.lengthOf(4);
         expect(mm.getDireccionViento()).to.have.lengthOf(4);
-
     });
 });

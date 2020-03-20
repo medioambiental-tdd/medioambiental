@@ -55,11 +55,7 @@ async function get_prediccion_municipio(municipio,get_datos){
                        ];
 
     mm= new MeteoMunicipio(nombre,fecha,estadoCielo,probPrecipitacion,cotaNieve,temperatura,sensTermica,velocidadViento,direccionViento);
-
-    return mm;
-    
-
-    
+    return mm;    
 }
 
 async function get_prediccion_textual(zona, get_datos){

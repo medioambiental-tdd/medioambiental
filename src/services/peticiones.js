@@ -6,7 +6,7 @@ async function get_datos_api_externa(URL){
     try{
         var respuesta = await fetch(URL);
         var json = await respuesta.json();
-       console.log(URL);
+        console.log(URL);
         if(!json.datos){
             throw new Error('Error en la URL para la petición');
         }

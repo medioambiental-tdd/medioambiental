@@ -1,5 +1,4 @@
-    class MeteoMunicipio{
-    
+class MeteoMunicipio{
     constructor(nombre,fecha,estadoCielo,probPrecipitacion,cotaNieve,temperatura,sensacionTermica,velocidadViento,direccionViento){
         this.nombreMunicipio=nombre;
         this.estado_cielo=estadoCielo;
@@ -11,8 +10,6 @@
         this.dir_viento=direccionViento;
         this.fecha=fecha;
     }
-
-    
 
     getEstadoCielo(){
         return this.estado_cielo;
@@ -49,9 +46,6 @@
     getFecha(){
         return this.fecha;
     }
-
-
-
 }
 
 module.exports = MeteoMunicipio;

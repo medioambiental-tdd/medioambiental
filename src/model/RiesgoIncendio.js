@@ -1,4 +1,3 @@
-
 class RiesgoIncendio{
     constuctor(){
         this.zona=null;

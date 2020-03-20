@@ -10,10 +10,10 @@ function getDatoTextual(zona,callback){
 
 function getDatoMunicipio(municipio,callback){
     if(municipio=="Granada"){
-         var hoy=new Date().toJSON().slice(0,10);
-         var nombre="Granada";
+        var hoy=new Date().toJSON().slice(0,10);
+        var nombre="Granada";
         var e=["nuboso","nuboso","nuboso","nuboso"];
-         var pp=[0,10,20,30];
+        var pp=[0,10,20,30];
         var pn=[2000,1000,2000,1000];
         var t=[9,9,6,6];
         var s=[12,12,9,9]
@@ -23,6 +23,7 @@ function getDatoMunicipio(municipio,callback){
     }else{
         mm="No existe tal municipio";
     }
+
     return callback(mm);
 }
 module.exports = {

@@ -6,9 +6,6 @@ var datos = {
 
 var datosMunicipio={
     status: 200,
-    
-    
-
     json(){
         return  [ {
             "elaborado" : new Date().toJSON().slice(0,10),
@@ -155,13 +152,9 @@ var datosMunicipio={
             }]
             }
         }];
-    
-}
-    
+    }
 }
         
-
-
 function get_datos_api_externa(URL){
     // segun URL devolver datos diferentes
 
