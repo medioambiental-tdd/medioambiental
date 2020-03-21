@@ -109,25 +109,30 @@ describe('Tests para operaciones con BD', function(){
             expect(mm.getVelocidadViento()).to.have.lengthOf(4);
             expect(mm.getDireccionViento()).to.have.lengthOf(4);
         })).to.not.throw;
-    });  
-/*     
-
-
-
-
-
-
-    it('Debería poder comprobar datos textuales', function(done){
-        expect(operaciones.getDatoMunicipio('Sevilla',predicciones,peticiones,function(mm){
-            expect(mm).to.be.an.instanceof(MeteoTextual);
-        })).to.not.throw;
-
-        done();
     });
 
+    it('Debería poder insertar un municipio', async ()=>{
+        operaciones.eliminarMunicipio('Granada');
 
 
-    it('Debería poder comprobar datos textuales', function(){
-        expect(operaciones.comprobarDatosTextual()).to.not.throw;
-    }); */
+        var datos = await predicciones.get_prediccion_municipio('Granada',peticiones.get_datos_api_externa_municipio);
+        operaciones.insertarMunicipio(datos,function(mm){
+
+            var hoy = new Date().toJSON().slice(0,10);            
+            expect(mm).to.be.an.instanceOf(MeteoMunicipio);
+            expect(mm.getNombreMunicipio()).to.equal("Granada");
+            expect(mm.getFecha()).to.equal(hoy);
+            expect(mm.getEstadoCielo()).to.have.lengthOf(4);
+            expect(mm.getProbPrecipitacion()).to.have.lengthOf(4);
+            expect(mm.getCotaNieve()).to.have.lengthOf(4);
+            expect(mm.getTemperatura()).to.have.lengthOf(4);
+            expect(mm.getSensacionTermica()).to.have.lengthOf(4);
+            expect(mm.getVelocidadViento()).to.have.lengthOf(4);
+            expect(mm.getDireccionViento()).to.have.lengthOf(4);
+
+        });
+
+        operaciones.eliminarMunicipio('Granada');
+    });
+
 }); 

@@ -166,6 +166,14 @@ function insertarMunicipio(datos,callback){
     return callback(mm);
 }
 
+function eliminarMunicipio(zona){
+    db.conn.run(`DELETE FROM municipios WHERE nombre = ?`,[zona],(err) =>{
+        if(err)
+            throw err;
+    })
+}
+
+
 module.exports = {
     actualizarTextual,
     obtenerDatosTextual,
@@ -175,5 +183,6 @@ module.exports = {
     actualizarMunicipio,
     actualizarDatosMunicipio,
     insertarMunicipio,
-    getDatoMunicipio
+    getDatoMunicipio,
+    eliminarMunicipio
 }
