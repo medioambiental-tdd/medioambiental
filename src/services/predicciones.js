@@ -3,7 +3,6 @@ require('dotenv').config();
 const API_KEY = process.env.AEMET_API_KEY;
 const MeteoTextual = require('../model/MeteoTextual')
 const MeteoMunicipio=require('../model/MeteoMunicipio');
-const peticiones = require('../mocks/peticiones');
 
 async function get_prediccion_municipio(municipio,get_datos){
     const URL = 'https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/'+municipio+'/?api_key=' + API_KEY;
@@ -98,8 +97,6 @@ function get_prediccion_montaña(area, dia){
 function get_Riesgo_Incendio(){
 
 }
-
-get_prediccion_municipio(18087,peticiones.get_datos_api_externa_municipio)
 
 module.exports = {
     get_prediccion_textual,

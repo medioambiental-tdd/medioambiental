@@ -1,11 +1,9 @@
 const DB = require('./db');
 const db = new DB('data/database.sqlite3');
-const predicciones  = require('../services/predicciones');
-const peticiones = require('../services/peticiones');
 const MeteoTextual = require('./MeteoTextual');
 const MeteoMunicipio = require('./MeteoMunicipio');
 
-function comprobarDatosTextual(){
+function comprobarDatosTextual(predicciones,peticiones){
     db.conn.all('SELECT fecha FROM textual WHERE fecha = (SELECT MIN(fecha) FROM textual)',(err, rows) => {
         if (err) 
             throw err;
@@ -13,13 +11,13 @@ function comprobarDatosTextual(){
             var fecha = new Date().toJSON().slice(0,10);
 
             if(fecha != rows[0].fecha){
-                actualizarDatosTextual();
+                actualizarDatosTextual(predicciones,peticiones);
             }
         }
     });
 }
 
-function actualizarDatosTextual(){
+function actualizarDatosTextual(predicciones,peticiones){
     db.conn.run(`DELETE FROM textual`,(err) =>{
         if(err)
             throw err;
@@ -74,23 +72,14 @@ function obtenerDatosTextual(callback){
     });
 }
 
-function getDatoMunicipio(municipio,callback){
-    try{
-        comprobarDatosMunicipio(municipio,callback);
-    }
-    catch(err){
-        throw err;
-    }
-}
-
- function comprobarDatosMunicipio(municipio,callback){
+function getDatoMunicipio(municipio,predicciones,peticiones,callback){
     db.conn.all('SELECT * FROM municipios WHERE  nombre = ? ',[municipio],(err, rows) => {
         if (err)
             throw err;
         else{
             var fecha = new Date().toJSON().slice(0,10);
             if(rows[0]==null||fecha != rows[0].FECHA){
-                actualizarDatosMunicipio(municipio,callback);
+                actualizarDatosMunicipio(municipio,predicciones,peticiones,callback);
                 if(callback=='No existe tal municipio')
                     return callback;
             }else{
@@ -109,7 +98,7 @@ function getDatoMunicipio(municipio,callback){
     });
 }
 
-function actualizarDatosMunicipio(municipio,callback){
+function actualizarDatosMunicipio(municipio,predicciones,peticiones,callback){
     db.conn.all(`SELECT CPRO,CMUN FROM codMunicipios where nombre = ? `,[municipio],async (err,rows) =>{
         if(err)
             throw err;
@@ -119,9 +108,40 @@ function actualizarDatosMunicipio(municipio,callback){
                 
             var m=rows[0].CPRO*1000+rows[0].CMUN;
             var datos = await predicciones.get_prediccion_municipio(m,peticiones.get_datos_api_externa);
-            insertarDatosMunicipio(datos,callback);
+            var fecha = new Date().toJSON().slice(0,10);
+
+            if(rows[0].FECHA != fecha)
+                actualizarDatoMunicipio(datos,callback);
+            else
+                insertarDatosMunicipio(datos,callback);
         }
     });
+}
+
+function actualizarDatoMunicipio(datos,callback){
+    var nombre  = datos.getNombreMunicipio();
+    var fecha   = datos.getFecha();
+    var eCielo  = datos.getEstadoCielo();
+    var pPrecip = datos.getProbPrecipitacion();
+    var cNieve  = datos.getCotaNieve();
+    var temp    = datos.getTemperatura();
+    var sensT   = datos.getSensacionTermica();
+    var vViento = datos.getVelocidadViento();
+    var dViento = datos.getDireccionViento();
+    
+    db.conn.run(`UPDATE municipios SET fecha=?, e1=?,e2=?,e3=?,e4=?,p1=?,p2=?,p3=?,p4=?,c1=?,c2=?,c3=?,c4=?,t1=?,
+                                        t2=?,t3=?,t4=?,s1=?,s2=?,s3=?,s4=?,v1=?,v2=?,v3=?,v4=?,d1=?,d2=?,d3=?,d4=? WHERE nombre=?`,
+                                        [fecha,eCielo[0],eCielo[1],eCielo[2],eCielo[3],pPrecip[0],
+                                        pPrecip[1],pPrecip[2],pPrecip[3],cNieve[0],cNieve[1],cNieve[2],
+                                        cNieve[3],temp[0],temp[1],temp[2],temp[3],sensT[0],
+                                        sensT[1],sensT[2],sensT[3],vViento[0],vViento[1],vViento[2]
+                                        ,vViento[3],dViento[0],dViento[1],dViento[2],dViento[3],nombre],(err)=>{
+                        if(err)
+                            throw err;
+                    });
+
+    mm= new MeteoMunicipio(nombre,fecha,eCielo,pPrecip,cNieve,temp,sensT,vViento,dViento);
+    return callback(mm);
 }
 
 function insertarDatosMunicipio(datos,callback){
@@ -158,7 +178,6 @@ module.exports = {
     insertarDatosTextual,
     eliminarDatosTextual,
     getDatoTextual,
-    comprobarDatosMunicipio,
     actualizarDatosMunicipio,
     insertarDatosMunicipio,
     getDatoMunicipio
