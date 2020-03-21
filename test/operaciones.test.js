@@ -16,9 +16,9 @@ describe('Tests para operaciones con BD', function(){
 
     it('Debería poder insertar datos textuales', function(done){
         operaciones.insertarDatosTextual('aaa','texto',function(mt){
-            done();
-
             expect(mt).to.be.an.instanceof(MeteoTextual);
+
+            done();
         });
     });
 
@@ -40,7 +40,6 @@ describe('Tests para operaciones con BD', function(){
 
     it('Debería poder comprobar datos textuales por ccaa', function(done){
         expect(operaciones.getDatoTextual('gotham',predicciones,peticiones,function(mt){
-            done();
 
             expect(mt).to.be.an.instanceof(MeteoTextual);
 
@@ -48,7 +47,9 @@ describe('Tests para operaciones con BD', function(){
             expect(mt).to.be.an.instanceof(MeteoTextual);
             expect(mt.getZona()).to.equal('gotham');
             expect(mt.getDia()).to.equal(hoy);
-            expect(mt.getTexto()).to.be.a('string');    
+            expect(mt.getTexto()).to.be.a('string');
+
+            done();
         })).to.not.throw;
     });
 
@@ -87,15 +88,13 @@ describe('Tests para operaciones con BD', function(){
     
     it('Debería poder actualizar los datos de un municipio', function(done){
         operaciones.actualizarDatosMunicipio('Sevilla',predicciones,peticiones,function(mm){
-            done();
-
             expect(mm).to.be.an.instanceof(MeteoMunicipio);
+            done();
         });
     });
 
     it('Debería poder comprobar datos de municipio', function(done){
         expect(operaciones.getDatoMunicipio('Granada',predicciones,peticiones,function(mm){
-            done();
 
             var hoy = new Date().toJSON().slice(0,10);            
             expect(mm).to.be.an.instanceOf(MeteoMunicipio);
@@ -108,10 +107,32 @@ describe('Tests para operaciones con BD', function(){
             expect(mm.getSensacionTermica()).to.have.lengthOf(4);
             expect(mm.getVelocidadViento()).to.have.lengthOf(4);
             expect(mm.getDireccionViento()).to.have.lengthOf(4);
+
+            done();
         })).to.not.throw;
     });
 
-    it('Debería poder insertar un municipio', async ()=>{
+    it('Debería poder comprobar datos de municipio', function(done){
+        expect(operaciones.getDatoMunicipio('Motril',predicciones,peticiones,function(mm){
+
+            var hoy = new Date().toJSON().slice(0,10);            
+            expect(mm).to.be.an.instanceOf(MeteoMunicipio);
+            expect(mm.getNombreMunicipio()).to.equal("Motril");
+            expect(mm.getFecha()).to.equal(hoy);
+            expect(mm.getEstadoCielo()).to.have.lengthOf(4);
+            expect(mm.getProbPrecipitacion()).to.have.lengthOf(4);
+            expect(mm.getCotaNieve()).to.have.lengthOf(4);
+            expect(mm.getTemperatura()).to.have.lengthOf(4);
+            expect(mm.getSensacionTermica()).to.have.lengthOf(4);
+            expect(mm.getVelocidadViento()).to.have.lengthOf(4);
+            expect(mm.getDireccionViento()).to.have.lengthOf(4);
+
+            done();
+        })).to.not.throw;
+    });
+
+
+    it('Debería poder insertar un municipio',async function(){
         operaciones.eliminarMunicipio('Granada');
 
 
@@ -135,4 +156,7 @@ describe('Tests para operaciones con BD', function(){
         operaciones.eliminarMunicipio('Granada');
     });
 
+    setTimeout(function() {
+        process.exit(1);
+    }, 5000);
 }); 
