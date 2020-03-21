@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 app.get('/tiempo/textual/:zona',(req,res) =>{
-    operaciones.getDatoTextual(req.params.zona,function(mt){
+    operaciones.getDatoTextual(req.params.zona,predicciones,peticiones,function(mt){
         var json = {
             zona: mt.getZona(),
             fecha: mt.getDia(),
@@ -79,8 +79,6 @@ app.get('/tiempo/textual/:zona',(req,res) =>{
 
 app.listen(PORT, () =>{
     console.log(`Servidor iniciado en puerto: ${PORT}`);
-
-    operaciones.comprobarDatosTextual(predicciones,peticiones);
 });
 
 module.exports = app;

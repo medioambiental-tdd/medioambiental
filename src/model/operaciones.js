@@ -3,45 +3,25 @@ const db = new DB('data/database.sqlite3');
 const MeteoTextual = require('./MeteoTextual');
 const MeteoMunicipio = require('./MeteoMunicipio');
 
-function comprobarDatosTextual(predicciones,peticiones){
-    db.conn.all('SELECT fecha FROM textual WHERE fecha = (SELECT MIN(fecha) FROM textual)',(err, rows) => {
-        if (err) 
-            throw err;
-        else{
-            var fecha = new Date().toJSON().slice(0,10);
-
-            if(fecha != rows[0].fecha){
-                actualizarDatosTextual(predicciones,peticiones);
-            }
-        }
-    });
-}
-
-function actualizarDatosTextual(predicciones,peticiones){
-    db.conn.run(`DELETE FROM textual`,(err) =>{
+function actualizarTextual(datos,callback){
+    db.conn.run(`UPDATE textual SET texto=?, fecha=date('now') WHERE zona=?`,[datos.getTexto(),datos.getZona()],(err)=>{
         if(err)
             throw err;
-        else{
-            db.conn.all(`SELECT codigo,nombre FROM ccaa`,(err,rows) =>{
-                if(err)
-                    throw err;
-                else{
-                    rows.forEach( async (row) => {
-                        var datos = await predicciones.get_prediccion_textual(row.codigo,peticiones.get_datos_api_externa);
-                        insertarDatosTextual(row.nombre,datos.getTexto());
-                    });
-                }
-            });
-        }
     });
+
+    return callback(datos);
 }
 
-function insertarDatosTextual(zona,texto){
+function insertarDatosTextual(zona,texto,callback){
     db.conn.run(`INSERT INTO textual (zona,texto,fecha) 
                 VALUES (?,?,date('now'))`,[zona,texto],(err) =>{
         if(err)
             throw err;
     })
+
+    var fecha = new Date().toJSON().slice(0,10);
+    var mt = new MeteoTextual(zona,fecha,texto);
+    return callback(mt);
 }
 
 function eliminarDatosTextual(zona){
@@ -51,24 +31,39 @@ function eliminarDatosTextual(zona){
     })
 }
 
-function getDatoTextual(zona, callback){
-    db.conn.all('SELECT * FROM textual WHERE zona= ?',[zona],(err, rows) =>{
+function getDatoTextual(zona, predicciones, peticiones, callback){
+    db.conn.all('SELECT * FROM textual WHERE zona=?',[zona],(err, rows) =>{
+        var datos;
+
         if(err)
             throw err;
         else{
-            mt = new MeteoTextual(rows[0].zona, rows[0].fecha, rows[0].texto);
+            var fecha = new Date().toJSON().slice(0,10);
 
-            return callback(mt);
+            if(rows[0]==null || fecha != rows[0].fecha){
+                db.conn.all(`SELECT codigo FROM ccaa WHERE nombre=?`,[zona],async (err,res)=>{
+                    datos = await predicciones.get_prediccion_textual(res[0].codigo,peticiones.get_datos_api_externa);
+                    var fecha = new Date().toJSON().slice(0,10);
+                    datos.setZona(zona);
+
+                    if(rows[0] == null)
+                        insertarDatosTextual(zona,datos.getTexto(),callback);
+                    else if(fecha != rows[0].fecha)
+                        actualizarTextual(datos,callback);
+                });
+            }
+            else{
+                datos = new MeteoTextual(rows[0].zona, rows[0].fecha, rows[0].texto);
+
+                return callback(datos);
+            }
         }
     })
 }
 
 function obtenerDatosTextual(callback){
     db.conn.all('SELECT zona,texto FROM textual',(err, rows) => {
-        if (err) 
-            throw err;
-        else
-            return callback(rows);
+            return callback(err,rows);
     });
 }
 
@@ -107,18 +102,18 @@ function actualizarDatosMunicipio(municipio,predicciones,peticiones,callback){
                 return callback('No existe tal municipio');
                 
             var m=rows[0].CPRO*1000+rows[0].CMUN;
-            var datos = await predicciones.get_prediccion_municipio(m,peticiones.get_datos_api_externa);
+            var datos = await predicciones.get_prediccion_municipio(m,peticiones.get_datos_api_externa_municipio);
             var fecha = new Date().toJSON().slice(0,10);
 
             if(rows[0].FECHA != fecha)
-                actualizarDatoMunicipio(datos,callback);
+                actualizarMunicipio(datos,callback);
             else
-                insertarDatosMunicipio(datos,callback);
+                insertarMunicipio(datos,callback);
         }
     });
 }
 
-function actualizarDatoMunicipio(datos,callback){
+function actualizarMunicipio(datos,callback){
     var nombre  = datos.getNombreMunicipio();
     var fecha   = datos.getFecha();
     var eCielo  = datos.getEstadoCielo();
@@ -144,7 +139,7 @@ function actualizarDatoMunicipio(datos,callback){
     return callback(mm);
 }
 
-function insertarDatosMunicipio(datos,callback){
+function insertarMunicipio(datos,callback){
     var nombre  = datos.getNombreMunicipio();
     var fecha   = datos.getFecha();
     var eCielo  = datos.getEstadoCielo();
@@ -167,18 +162,18 @@ function insertarDatosMunicipio(datos,callback){
             throw err;
     });
 
-    mm= new MeteoMunicipio(nombre,fecha,eCielo,pPrecip,cNieve,temp,sensT,vViento,dViento);
+    var mm= new MeteoMunicipio(nombre,fecha,eCielo,pPrecip,cNieve,temp,sensT,vViento,dViento);
     return callback(mm);
 }
 
 module.exports = {
-    comprobarDatosTextual,
-    actualizarDatosTextual,
+    actualizarTextual,
     obtenerDatosTextual,
     insertarDatosTextual,
     eliminarDatosTextual,
     getDatoTextual,
+    actualizarMunicipio,
     actualizarDatosMunicipio,
-    insertarDatosMunicipio,
+    insertarMunicipio,
     getDatoMunicipio
 }

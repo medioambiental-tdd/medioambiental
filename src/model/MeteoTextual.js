@@ -9,6 +9,10 @@ class MeteoTextual{
         return this.zona;
     }
 
+    setZona(zona){
+        this.zona = zona;
+    }
+
     getDia(){
         return this.dia;
     }
