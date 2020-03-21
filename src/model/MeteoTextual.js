@@ -17,6 +17,10 @@ class MeteoTextual{
         return this.dia;
     }
 
+    setDia(dia){
+        this.dia = dia;
+    }
+
     getTexto(){
         return this.texto;
     }

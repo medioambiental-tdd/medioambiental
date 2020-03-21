@@ -39,19 +39,52 @@ describe('Tests para operaciones con BD', function(){
     });
 
     it('Debería poder comprobar datos textuales por ccaa', function(done){
-        expect(operaciones.getDatoTextual('cataluña',predicciones,peticiones,function(mt){
+        expect(operaciones.getDatoTextual('gotham',predicciones,peticiones,function(mt){
             done();
 
             expect(mt).to.be.an.instanceof(MeteoTextual);
 
             var hoy = new Date().toJSON().slice(0,10);
             expect(mt).to.be.an.instanceof(MeteoTextual);
-            expect(mt.getZona()).to.equal('cataluña');
+            expect(mt.getZona()).to.equal('gotham');
             expect(mt.getDia()).to.equal(hoy);
             expect(mt.getTexto()).to.be.a('string');    
         })).to.not.throw;
     });
 
+    it('Debería poder actualizar datos textuales por ccaa', async()=>{
+            var mt1 = await predicciones.get_prediccion_textual('gotham',peticiones.get_datos_api_externa);
+            var date = new Date();
+            date.setDate(date.getDate() - 1);
+            date = date.toJSON().slice(0,10);
+
+            mt1.setDia(date);
+
+            operaciones.actualizarTextual(mt1,function(mt2){                
+                expect(mt2).to.be.an.instanceof(MeteoTextual);
+                expect(mt2.getZona()).to.equal('gotham');
+                expect(mt2.getDia()).to.equal(date);
+                expect(mt2.getTexto()).to.be.a('string');
+
+                operaciones.getDatoTextual('gotham',predicciones,peticiones,function(mt){
+    
+                    console.log(mt);
+                    expect(mt).to.be.an.instanceof(MeteoTextual);
+        
+                    var hoy = new Date().toJSON().slice(0,10);
+                    expect(mt).to.be.an.instanceof(MeteoTextual);
+                    expect(mt.getZona()).to.equal('gotham');
+                    expect(mt.getDia()).to.equal(hoy);
+                    expect(mt.getTexto()).to.be.a('string');    
+                });        
+            });
+    });
+
+    it('Debería poder ELIMINAR datos textuales', function(){
+        expect(operaciones.eliminarDatosTextual('gotham')).to.not.throw;
+    });
+
+    
     it('Debería poder actualizar los datos de un municipio', function(done){
         operaciones.actualizarDatosMunicipio('Sevilla',predicciones,peticiones,function(mm){
             done();
@@ -76,18 +109,10 @@ describe('Tests para operaciones con BD', function(){
             expect(mm.getVelocidadViento()).to.have.lengthOf(4);
             expect(mm.getDireccionViento()).to.have.lengthOf(4);
         })).to.not.throw;
-    });    
+    });  
 /*     
-    it('Actualizar datos textual', function(done){
-        expect(operaciones.actualizarDatosTextual(predicciones,peticiones)).to.not.throw;
-        done();
-    });
 
 
-
-    it('Debería poder ELIMINAR datos textuales', function(){
-        expect(operaciones.eliminarDatosTextual()).to.not.throw;
-    });
 
 
 

@@ -1,7 +1,7 @@
 var datos = {
     status: 200,
     statusText: 'OK',
-    text() { return 'TEXTO'; }
+    text() { return 'Dia chungo en Gotham hoy. Se recomienda no salir al exterior.'; }
 };
 
 var datosMunicipio={
