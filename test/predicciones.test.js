@@ -35,7 +35,7 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
     });
 
     it('Debería devolver un objeto de la clase MeteoMunicipio con datos válidos',async()=>{
-        mm= await predicciones.get_prediccion_municipio(18087,peticiones.get_datos_api_externa_municipio);
+        mm= await predicciones.get_prediccion_municipio(18087,peticiones.get_datos_api_externa);
         var hoy = new Date().toJSON().slice(0,10);
         
         expect(mm).to.be.an.instanceOf(MeteoMunicipio);

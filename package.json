@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "nyc mocha --exit",
+    "test": "nyc mocha",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov",
     "start": "nodemon ./src/index.js"
   },
