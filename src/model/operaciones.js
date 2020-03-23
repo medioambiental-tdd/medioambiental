@@ -102,7 +102,7 @@ function actualizarDatosMunicipio(municipio,predicciones,peticiones,callback){
                 return callback('No existe tal municipio');
                 
             var m=rows[0].CPRO*1000+rows[0].CMUN;
-            var datos = await predicciones.get_prediccion_municipio(m,peticiones.get_datos_api_externa_municipio);
+            var datos = await predicciones.get_prediccion_municipio(m,peticiones.get_datos_api_externa);
             var fecha = new Date().toJSON().slice(0,10);
 
             if(rows[0].FECHA != fecha)

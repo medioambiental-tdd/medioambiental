@@ -77,6 +77,7 @@ app.get('/tiempo/prediccion/:municipio', (req,res) =>{
 
 });
 
-app.listen(PORT, () => console.log(`Servidor iniciado en puerto: ${PORT}`));
+var server = app.listen(PORT, () => console.log(`Servidor iniciado en puerto: ${PORT}`));
+server.close();
 
 module.exports = app;

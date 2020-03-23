@@ -157,17 +157,12 @@ var datosMunicipio={
         
 function get_datos_api_externa(URL){
     // segun URL devolver datos diferentes
-
-    return datos;
-}
-
-function get_datos_api_externa_municipio(URL){
-    // segun URL devolver datos diferentes
-   
-    return datosMunicipio;
+    if(URL.includes('ccaa'))
+      return datos;
+    else 
+      return datosMunicipio;
 }
 
 module.exports = {
-    get_datos_api_externa,
-    get_datos_api_externa_municipio
+    get_datos_api_externa
 }

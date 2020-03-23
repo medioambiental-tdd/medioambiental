@@ -68,8 +68,6 @@ describe('Tests para operaciones con BD', function(){
                 expect(mt2.getTexto()).to.be.a('string');
 
                 operaciones.getDatoTextual('gotham',predicciones,peticiones,function(mt){
-    
-                    console.log(mt);
                     expect(mt).to.be.an.instanceof(MeteoTextual);
         
                     var hoy = new Date().toJSON().slice(0,10);
@@ -81,11 +79,10 @@ describe('Tests para operaciones con BD', function(){
             });
     });
 
-    it('Debería poder ELIMINAR datos textuales', function(){
+    it('Debería poder eliminar datos textuales', function(){
         expect(operaciones.eliminarDatosTextual('gotham')).to.not.throw;
     });
 
-    
     it('Debería poder actualizar los datos de un municipio', function(done){
         operaciones.actualizarDatosMunicipio('Sevilla',predicciones,peticiones,function(mm){
             expect(mm).to.be.an.instanceof(MeteoMunicipio);
@@ -114,7 +111,6 @@ describe('Tests para operaciones con BD', function(){
 
     it('Debería poder comprobar datos de municipio', function(done){
         expect(operaciones.getDatoMunicipio('Motril',predicciones,peticiones,function(mm){
-
             var hoy = new Date().toJSON().slice(0,10);            
             expect(mm).to.be.an.instanceOf(MeteoMunicipio);
             expect(mm.getNombreMunicipio()).to.equal("Motril");
@@ -136,7 +132,7 @@ describe('Tests para operaciones con BD', function(){
         operaciones.eliminarMunicipio('Granada');
 
 
-        var datos = await predicciones.get_prediccion_municipio('Granada',peticiones.get_datos_api_externa_municipio);
+        var datos = await predicciones.get_prediccion_municipio('Granada',peticiones.get_datos_api_externa);
         operaciones.insertarMunicipio(datos,function(mm){
 
             var hoy = new Date().toJSON().slice(0,10);            
@@ -155,8 +151,4 @@ describe('Tests para operaciones con BD', function(){
 
         operaciones.eliminarMunicipio('Granada');
     });
-
-    setTimeout(function() {
-        process.exit(1);
-    }, 5000);
-}); 
+});
