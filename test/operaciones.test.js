@@ -48,7 +48,7 @@ describe('Tests para operaciones con BD', function(){
             expect(mt.getZona()).to.equal('gotham');
             expect(mt.getDia()).to.equal(hoy);
             expect(mt.getTexto()).to.be.a('string');
-
+                console.log("insertar sin que aparezca\n");
             done();
         })).to.not.throw;
     });
@@ -74,14 +74,14 @@ describe('Tests para operaciones con BD', function(){
                     expect(mt).to.be.an.instanceof(MeteoTextual);
                     expect(mt.getZona()).to.equal('gotham');
                     expect(mt.getDia()).to.equal(hoy);
-                    expect(mt.getTexto()).to.be.a('string');    
+                    expect(mt.getTexto()).to.be.a('string');
+                    console.log("Actualizar\n");
+                    expect(operaciones.eliminarDatosTextual('gotham')).to.not.throw;
                 });        
             });
     });
 
-    it('Debería poder eliminar datos textuales', function(){
-        expect(operaciones.eliminarDatosTextual('gotham')).to.not.throw;
-    });
+    
 
     it('Debería poder actualizar los datos de un municipio', function(done){
         operaciones.actualizarDatosMunicipio('Sevilla',predicciones,peticiones,function(mm){
