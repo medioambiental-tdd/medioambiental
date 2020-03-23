@@ -150,5 +150,13 @@ describe('Tests para operaciones con BD', function(){
         });
 
         operaciones.eliminarMunicipio('Granada');
+        var datos = await predicciones.get_prediccion_municipio('Granada',peticiones.get_datos_api_externa);
+    });
+
+    it('Debería indicar que un municipio no existe',function(done){
+        operaciones.getDatoMunicipio('Arkham',predicciones,peticiones,function(mm){
+            expect(mm).to.equal('No existe tal municipio');
+            done();
+        });
     });
 });
