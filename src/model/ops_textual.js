@@ -51,7 +51,7 @@ function insertar(zona,texto,callback){
 }
 
 function actualizar(datos,callback){
-    db.conn.run(`UPDATE textual SET texto=?, fecha=date('now') WHERE zona=?`,[datos.getTexto(),datos.getZona()],(err)=>{
+    db.conn.run(`UPDATE textual SET texto=?, fecha=? WHERE zona=?`,[datos.getTexto(),datos.getDia(),datos.getZona()],(err)=>{
         if(err)
             throw err;
     });

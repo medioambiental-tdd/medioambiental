@@ -17,20 +17,6 @@ describe('Tests para operaciones con textual', function(){
         expect(ops_textual).to.exist
     });
 
-    it('Debería poder insertar datos textuales', function(done){
-        ops_textual.insertar('aaa','texto',function(mt){
-            expect(mt).to.be.an.instanceof(MeteoTextual);
-
-            done();
-        });
-    });
-
-    it('Debería poder eliminar datos textuales', function(done){
-        ops_textual.eliminar('aaa');
-        done();
-    });
-
-
     it('Debería poder consultar todos los datos textuales', function(done){
         ops_textual.consultarTodos(function(err,tabla){
             if(err) done(err);
@@ -41,7 +27,7 @@ describe('Tests para operaciones con textual', function(){
         });
     });
 
-    it('Debería poder comprobar datos textuales por ccaa', function(done){
+    it('Debería poder insertar datos textuales por ccaa', function(done){
         expect(ops_textual.consultar('gotham',predicciones,peticiones,function(mt){
 
             expect(mt).to.be.an.instanceof(MeteoTextual);
@@ -55,31 +41,59 @@ describe('Tests para operaciones con textual', function(){
         })).to.not.throw;
     });
 
-    it('Debería poder actualizar datos textuales por ccaa', async()=>{
-            var mt1 = await predicciones.get_prediccion_textual('gotham',peticiones.get_datos_api_externa);
-            var date = new Date();
-            date.setDate(date.getDate() - 1);
-            date = date.toJSON().slice(0,10);
+    it('Debería poder consultar datos textuales por ccaa', function(done){
+        expect(ops_textual.consultar('gotham',predicciones,peticiones,function(mt){
 
-            mt1.setDia(date);
+            expect(mt).to.be.an.instanceof(MeteoTextual);
 
-            ops_textual.actualizar(mt1,function(mt2){                
-                expect(mt2).to.be.an.instanceof(MeteoTextual);
-                expect(mt2.getZona()).to.equal('gotham');
-                expect(mt2.getDia()).to.equal(date);
-                expect(mt2.getTexto()).to.be.a('string');
+            var hoy = new Date().toJSON().slice(0,10);
+            expect(mt).to.be.an.instanceof(MeteoTextual);
+            expect(mt.getZona()).to.equal('gotham');
+            expect(mt.getDia()).to.equal(hoy);
+            expect(mt.getTexto()).to.be.a('string');
+            done();
+        })).to.not.throw;
+    });
 
-                ops_textual.consultar('gotham',predicciones,peticiones,function(mt){
-                    expect(mt).to.be.an.instanceof(MeteoTextual);
-        
-                    var hoy = new Date().toJSON().slice(0,10);
-                    expect(mt).to.be.an.instanceof(MeteoTextual);
-                    expect(mt.getZona()).to.equal('gotham');
-                    expect(mt.getDia()).to.equal(hoy);
-                    expect(mt.getTexto()).to.be.a('string');
-                    expect(ops_textual.eliminar('gotham')).to.not.throw;
-                });        
-            });
+    it('Debería poder actualizar datos textuales por ccaa', function(done){
+        var datos = {
+            status: 200,
+            statusText: 'OK',
+            text() { return 'Dia chungo en Gotham hoy. Se recomienda no salir al exterior.'; }
+        };
+        var date = new Date();
+        date.setDate(date.getDate() - 1);
+        date = date.toJSON().slice(0,10);
+
+        var mt1 = new MeteoTextual('gotham',date,datos.text());
+
+        ops_textual.actualizar(mt1,function(mt2){                
+            expect(mt2).to.be.an.instanceof(MeteoTextual);
+            expect(mt2.getZona()).to.equal('gotham');
+            expect(mt2.getDia()).to.equal(date);
+            expect(mt2.getTexto()).to.be.a('string');
+
+            done();
+        });
+    });
+
+    it('Debería poder consultar datos textuales por ccaa', function(done){
+        expect(ops_textual.consultar('gotham',predicciones,peticiones,function(mt){
+
+            expect(mt).to.be.an.instanceof(MeteoTextual);
+
+            var hoy = new Date().toJSON().slice(0,10);
+            expect(mt).to.be.an.instanceof(MeteoTextual);
+            expect(mt.getZona()).to.equal('gotham');
+            expect(mt.getDia()).to.equal(hoy);
+            expect(mt.getTexto()).to.be.a('string');
+            done();
+        })).to.not.throw;
+    });
+
+    it('Debería poder eliminar datos de montaña', function(done){
+        expect(ops_textual.eliminar('gotham')).to.not.throw;
+        done();
     });
 });
 
