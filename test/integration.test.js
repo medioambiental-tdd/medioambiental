@@ -29,4 +29,11 @@ describe("peticiones GET", function(){
             });
           
     });
+
+    it('debería recibir una prediccion meteorológica de montaña', function(done){
+        request(app)
+            .get('/tiempo/montaña/monte_test')
+            .expect('Content-Type',/json/)
+            .expect(200,done);
+    });
 });

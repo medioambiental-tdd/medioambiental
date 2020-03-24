@@ -1,9 +1,11 @@
 const ops_municipio  = require('../src/model/ops_municipio');
 const ops_textual    = require('../src/model/ops_textual'); 
+const ops_montaña    = require('../src/model/ops_montaña');
 const predicciones   = require('../src/services/predicciones');
 const peticiones     = require('../src/mocks/peticiones');
 const MeteoTextual   = require('../src/libs/MeteoTextual');
 const MeteoMunicipio = require ('../src/libs/MeteoMunicipio');
+const MeteoMontaña   = require ('../src/libs/MeteoMontaña');
 const chai           = require('chai');
 const expect         = chai.expect;
 const chaiAsPromised = require("chai-as-promised");
@@ -11,7 +13,6 @@ chai.use(chaiAsPromised);
 
 
 describe('Tests para operaciones con textual', function(){
-
     it('Debería cargar la biblioteca de operaciones con textual y poder instanciarse',function(){
         expect(ops_textual).to.exist
     });
@@ -80,7 +81,6 @@ describe('Tests para operaciones con textual', function(){
                 });        
             });
     });
-
 });
 
 describe('Tests para operaciones con municipios', function(){
@@ -164,5 +164,90 @@ describe('Tests para operaciones con municipios', function(){
             expect(mm).to.equal('No existe tal municipio');
             done();
         });
+    });
+});
+
+describe('Tests para operaciones con montañas', function(){
+    it('Debería cargar la biblioteca de operaciones de montaña y poder instanciarse',function(){
+        expect(ops_montaña).to.exist
+    });
+
+    it('Debería poder consultar todos los datos de montaña', function(done){
+        ops_montaña.consultarTodos(function(err,tabla){
+            if(err) done(err);
+            else
+                done();
+
+            expect(tabla[0]).to.have.all.keys('nombre', 'estado_cielo','precipitaciones','tormentas','temperaturas','fecha');
+        });
+    });
+
+    it('Debería poder insertar datos de montaña', function(done){
+        ops_montaña.consultar('monte_test',predicciones,peticiones,function(res){
+            var hoy = new Date().toJSON().slice(0,10);
+            expect(res).to.be.an.instanceof(MeteoMontaña);
+            expect(res.getNombre()).to.equal('monte_test');
+            expect(res.getEstadoCielo()).to.equal('Intervalos nubosos.');
+            expect(res.getPrecipitaciones()).to.equal('Podrán caer algunos chubascos vespertinos.');
+            expect(res.getTormentas()).to.equal('No se descarta alguna ocasional.');
+            expect(res.getTemperaturas()).to.equal('Mínimas sin cambios o en ligero descenso.');
+            expect(res.getFecha()).to.equal(hoy);
+
+            done();
+        });
+    });
+
+    it('Debería poder consultar datos de montaña', function(done){
+        ops_montaña.consultar('monte_test',predicciones,peticiones,function(res){
+            var hoy = new Date().toJSON().slice(0,10);
+            expect(res).to.be.an.instanceof(MeteoMontaña);
+            expect(res.getNombre()).to.equal('monte_test');
+            expect(res.getEstadoCielo()).to.equal('Intervalos nubosos.');
+            expect(res.getPrecipitaciones()).to.equal('Podrán caer algunos chubascos vespertinos.');
+            expect(res.getTormentas()).to.equal('No se descarta alguna ocasional.');
+            expect(res.getTemperaturas()).to.equal('Mínimas sin cambios o en ligero descenso.');
+            expect(res.getFecha()).to.equal(hoy);
+
+            done();
+        });
+    });
+
+    it('Debería poder actualizar datos de montaña', function(done){
+        var nombre          = "monte_test"
+        var estado_cielo    = "Intervalos nubosos.";
+        var precipitaciones = "Podrán caer algunos chubascos vespertinos.";
+        var tormentas       = "No se descarta alguna ocasional.";
+        var temperaturas    = "Mínimas sin cambios o en ligero descenso.";
+        var fecha           = new Date();
+        fecha.setDate(fecha.getDate() - 1);
+        fecha = fecha.toJSON().slice(0,10);
+
+        var montaña = new MeteoMontaña(nombre,estado_cielo,precipitaciones,tormentas,temperaturas,fecha);    
+
+        ops_montaña.actualizar(montaña,function(res){
+            expect(res).to.be.an.instanceof(MeteoMontaña);
+            expect(res.getFecha()).to.equal(fecha);
+
+            done();
+        });
+    });
+
+    it('Debería poder consultar datos de montaña', function(done){
+        ops_montaña.consultar('monte_test',predicciones,peticiones,function(res){            
+            expect(res).to.be.an.instanceof(MeteoMontaña);
+            expect(res.getNombre()).to.equal('monte_test');
+            expect(res.getEstadoCielo()).to.equal('Intervalos nubosos.');
+            expect(res.getPrecipitaciones()).to.equal('Podrán caer algunos chubascos vespertinos.');
+            expect(res.getTormentas()).to.equal('No se descarta alguna ocasional.');
+            expect(res.getTemperaturas()).to.equal('Mínimas sin cambios o en ligero descenso.');
+
+            done();
+        });
+    });
+
+
+    it('Debería poder eliminar datos de montaña', function(done){
+        expect(ops_montaña.eliminar('monte_test')).to.not.throw;
+        done();
     });
 });

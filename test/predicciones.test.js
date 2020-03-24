@@ -1,11 +1,12 @@
-const chai = require('chai');
-const expect = chai.expect;
-var chaiAsPromised = require("chai-as-promised");
+const chai            = require('chai');
+const expect          = chai.expect;
+var chaiAsPromised    = require("chai-as-promised");
 chai.use(chaiAsPromised);
-const predicciones  = require('../src/services/predicciones');
-const peticiones = require('../src/mocks/peticiones');
-const MeteoTextual = require('../src/libs/MeteoTextual');
-const MeteoMunicipio = require ('../src/libs/MeteoMunicipio');
+const predicciones    = require('../src/services/predicciones');
+const peticiones      = require('../src/mocks/peticiones');
+const MeteoTextual    = require('../src/libs/MeteoTextual');
+const MeteoMunicipio  = require('../src/libs/MeteoMunicipio');
+const MeteoMontaña    = require('../src/libs/MeteoMontaña');
 
 describe('Tests unitarios para las llamadas a APIs externas', function(){
     it('Debería cargar la biblioteca de predicciones y poder instanciarse',function(){
@@ -22,6 +23,10 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
 
     it('Debería cargar la clase MeteoMunicipio y poder instanciarse',function(){
         expect(MeteoMunicipio).to.exist
+    });
+
+    it('Debería cargar la clase MeteoMontaña y poder instanciarse',function(){
+        expect(MeteoMontaña).to.exist
     });
 
     it('Debería devolver un objeto de la clase MeteoTextual con datos válidos', async() =>{
@@ -48,5 +53,21 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
         expect(mm.getSensacionTermica()).to.have.lengthOf(4);
         expect(mm.getVelocidadViento()).to.have.lengthOf(4);
         expect(mm.getDireccionViento()).to.have.lengthOf(4);
+    });
+
+    it('Debería devolver un objeto de la clase MeteoMontaña con datos válidos', async() =>{
+        mt = await predicciones.get_prediccion_montaña('Monte Test','mt',peticiones.get_datos_api_externa);
+        var hoy = new Date().toJSON().slice(0,10);
+
+        expect(mt).to.be.an.instanceof(MeteoMontaña);
+        expect(mt.getNombre()).to.equal('Monte Test');
+        expect(mt.getEstadoCielo()).to.equal('Intervalos nubosos.');
+        expect(mt.getPrecipitaciones()).to.equal('Podrán caer algunos chubascos vespertinos.');
+        expect(mt.getTormentas()).to.equal('No se descarta alguna ocasional.');
+        expect(mt.getTemperaturas()).to.equal('Mínimas sin cambios o en ligero descenso.');
+        expect(mt.getFecha()).to.equal(hoy);
+
+        mt.setFecha("2020-03-21");
+        expect(mt.getFecha()).to.equal("2020-03-21");
     });
 });
