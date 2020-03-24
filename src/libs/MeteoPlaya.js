@@ -1,5 +1,5 @@
 class MeteoPlaya{
-    constructor(nombrePlaya,codigo,provincia,fecha,estado_cielo,viento,oleaje,temp_agua,temp_max){
+    constructor(nombrePlaya,fecha,estado_cielo,viento,oleaje,temp_agua,temp_max){
         this.nombrePlaya=nombrePlaya;
         this.codigo=codigo;
         this.estado_cielo=estado_cielo;
@@ -7,7 +7,6 @@ class MeteoPlaya{
         this.oleaje=oleaje;
         this.temp_max=temp_max;
         this.temp_agua=temp_agua;
-        this.provincia=provincia;
         this.fecha=fecha;
     }
 
@@ -43,9 +42,7 @@ class MeteoPlaya{
         return this.temp_max;
     }
 
-    getProvincia(){
-        return this.provincia;
-    }
+
 
    
 }

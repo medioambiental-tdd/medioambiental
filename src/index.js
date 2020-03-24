@@ -6,6 +6,7 @@ const predicciones  = require('./services/predicciones');
 const ops_municipio = require('./model/ops_municipio');
 const ops_textual   = require('./model/ops_textual'); 
 const ops_montaña   = require('./model/ops_montaña');
+const ops_playa   = require('./model/ops_playa');
 
 // Body parser
 app.use(express.json());
@@ -97,6 +98,38 @@ app.get('/tiempo/montaña/:nombre', (req,res)=>{
 app.get('/contaminacion',(req,res)=>{
     var data = "24-03-2020 00:10 SO2(001): +00000.77 ug/m3";
     res.send(data);
+});
+
+app.get('/tiempo/prediccion/:playa', (req,res) =>{
+    ops_playa.consultar(req.params.playa,predicciones,peticiones,function(mp){
+        if(mp=='No existe tal playa'){
+            res.json(mp);
+        }else{
+            var json = {
+                municipio: mp.getNombreMunicipio(),
+                fecha: mp.getFecha(),
+                estadoCielo: [
+                    {periodo:"Por la mañana",valor:mp.getEstadoCielo()[0]},
+                    {periodo:"Por la tarde",valor:mp.getEstadoCielo()[1]},
+                ],
+                Viento: [
+                    {periodo:"Por la mañana",valor:mp.getViento()[0]},
+                    {periodo:"Por la tarde",valor:mp.getViento()[1]},
+                ],
+                Oleaje: [
+                    {periodo:"Por la mañana",valor:mp.getOleaje[0]},
+                    {periodo:"Por la tarde",valor:mp.getOleaje[1]},
+                ],
+                temperaturaAgua: [
+                    {periodo:"diario",valor:mp.getTempAgua()},
+                ],
+                temperaturaMaximaExterior: [
+                    {periodo:"diario",valor:mp.getTempMax()},
+                ]
+            }
+            res.send(json);
+        }
+ });
 });
 
 app.listen(PORT, () =>{

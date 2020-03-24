@@ -102,6 +102,8 @@ function get_Riesgo_Incendio(){
 
 }
 
+
+
 module.exports = {
     get_prediccion_textual,
     get_prediccion_municipio,

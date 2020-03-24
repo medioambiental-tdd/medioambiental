@@ -89,8 +89,6 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
         expect(mp.getViento()).to.have.lengthOf(2);
         expect(mp.getTempAgua()).to.equal(16);
         expect(mp.getTempMax()).to.be.an.integer(18);
-        expect(mp.getCodigo()).to.be.an.integer(1814008);
-        expect(mp.getProvincia()).to.equal("Granada");
 
 
     });
