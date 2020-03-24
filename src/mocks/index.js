@@ -75,23 +75,27 @@ app.get('/tiempo/prediccion/:municipio', (req,res) =>{
 
             res.send(json);
         }
-    });
+    });    
+});
 
+app.get('/tiempo/montaña/:nombre', (req,res)=>{
+    ops_montaña.consultar(req.params.nombre,function(montaña){
+        var json = {
+            nombre: montaña.getNombre(),
+            estado_cielo: montaña.getEstadoCielo(),
+            precipitaciones: montaña.getPrecipitaciones(),
+            tormentas: montaña.getTormentas(),
+            temperaturas: montaña.getTemperaturas(),
+            fecha: montaña.getFecha()
+        };
 
-    app.get('/tiempo/montaña/:nombre', (req,res)=>{
-        ops_montaña.consultar(req.params.nombre,function(montaña){
-            var json = {
-                nombre: montaña.getNombre(),
-                estado_cielo: montaña.getEstadoCielo(),
-                precipitaciones: montaña.getPrecipitaciones(),
-                tormentas: montaña.getTormentas(),
-                temperaturas: montaña.getTemperaturas(),
-                fecha: montaña.getFecha()
-            };
-    
-            res.json(json);
-        });
+        res.json(json);
     });
+});
+
+app.get('/contaminacion',(req,res)=>{
+    var data = "24-03-2020 00:10 SO2(001): +00000.77 ug/m3";
+    res.send(data);
 });
 
 var server = app.listen(PORT, () => console.log(`Servidor iniciado en puerto: ${PORT}`));

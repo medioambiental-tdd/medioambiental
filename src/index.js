@@ -94,6 +94,11 @@ app.get('/tiempo/montaña/:nombre', (req,res)=>{
     });
 });
 
+app.get('/contaminacion',(req,res)=>{
+    var data = "24-03-2020 00:10 SO2(001): +00000.77 ug/m3";
+    res.send(data);
+});
+
 app.listen(PORT, () =>{
     console.log(`Servidor iniciado en puerto: ${PORT}`);
 });

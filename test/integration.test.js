@@ -36,4 +36,15 @@ describe("peticiones GET", function(){
             .expect('Content-Type',/json/)
             .expect(200,done);
     });
+
+    it('deberia recibir información sobre la calidad del aire', function(done){
+        request(app)
+            .get('/contaminacion')
+            .end(function(err,res){
+                expect('Content-Type',"text/html")
+                expect(res.text).to.equal("24-03-2020 00:10 SO2(001): +00000.77 ug/m3")
+                expect(200,done);
+                done();
+            });
+    });
 });
