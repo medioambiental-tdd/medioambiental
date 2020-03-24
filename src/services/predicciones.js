@@ -76,13 +76,10 @@ async function get_prediccion_textual(zona, get_datos){
     return mt;
 }
 
-function get_prediccion_costa(provincia,playa){
-
-    // ...
-    // lógica de API externa
-    // ...
-    
-    // convertir a clase Meteo
+function get_prediccion_playa(codigo,get_datos){
+    const URL='https://opendata.aemet.es/opendata/api/prediccion/especifica/playa/'+codigo+'/?api_key=' + API_KEY;
+    var datos=await get_datos(URL);
+    var json= await datos.json();
 }
 
 async function get_prediccion_montaña(nombre,codigo, get_datos){
@@ -108,7 +105,7 @@ function get_Riesgo_Incendio(){
 module.exports = {
     get_prediccion_textual,
     get_prediccion_municipio,
-    get_prediccion_costa,
+    get_prediccion_playa,
     get_prediccion_montaña,
     get_Riesgo_Incendio
 }
