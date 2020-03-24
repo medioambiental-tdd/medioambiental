@@ -4,6 +4,40 @@ var datos = {
     text() { return 'Dia chungo en Gotham hoy. Se recomienda no salir al exterior.'; }
 };
 
+var datosMontaña = {
+  status: 200,
+  json(){
+    return [{
+      "seccion": [{
+        "apartado": [{
+          "cabecera": "Estado del cielo",
+          "texto": "Intervalos nubosos.",
+          "nombre": "nubosidad"
+        }, {
+          "cabecera": "Precipitaciones",
+          "texto": "Podrán caer algunos chubascos vespertinos.",
+          "nombre": "pcp"
+        }, {
+          "cabecera": "Tormentas",
+          "texto": "No se descarta alguna ocasional.",
+          "nombre": "tormentas"
+        }, {
+          "cabecera": "Temperaturas",
+          "texto": "Mínimas sin cambios o en ligero descenso.",
+          "nombre": "temperatura"
+        }, {
+          "cabecera": "Viento",
+          "texto": "Flojo, con predominio de las componentes este y sur e intervalos de intensidad moderada en cotas altas.",
+          "nombre": "viento"
+        }],
+        "lugar": [],
+        "parrafo": [],
+        "nombre": "prediccion"
+      }]
+    }]
+  } 
+};
+
 var datosMunicipio={
     status: 200,
     json(){
@@ -156,11 +190,14 @@ var datosMunicipio={
 }
         
 function get_datos_api_externa(URL){
-    // segun URL devolver datos diferentes
-    if(URL.includes('ccaa'))
-      return datos;
-    else 
-      return datosMunicipio;
+      // segun URL devolver datos diferentes
+      if(URL.includes('ccaa'))
+        return datos;
+      else if(URL.includes('monta%C3%B1a')){
+          return datosMontaña;
+      }
+      else 
+        return datosMunicipio;
 }
 
 module.exports = {

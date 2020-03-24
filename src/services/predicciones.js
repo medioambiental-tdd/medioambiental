@@ -1,8 +1,9 @@
 // variables de entorno
 require('dotenv').config();
-const API_KEY = process.env.AEMET_API_KEY;
-const MeteoTextual = require('../libs/MeteoTextual')
-const MeteoMunicipio=require('../libs/MeteoMunicipio');
+const API_KEY        = process.env.AEMET_API_KEY;
+const MeteoTextual   = require('../libs/MeteoTextual')
+const MeteoMunicipio = require('../libs/MeteoMunicipio');
+const MeteoMontaña   = require('../libs/MeteoMontaña');
 
 async function get_prediccion_municipio(municipio,get_datos){
     const URL = 'https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/'+municipio+'/?api_key=' + API_KEY;
@@ -70,7 +71,7 @@ async function get_prediccion_textual(zona, get_datos){
     var texto = await datos.text();
 
     var fecha = new Date().toJSON().slice(0,10);
-    mt = new MeteoTextual(zona,fecha,texto);
+    var mt = new MeteoTextual(zona,fecha,texto);
 
     return mt;
 }
@@ -84,15 +85,21 @@ function get_prediccion_costa(provincia,playa){
     // convertir a clase Meteo
 }
 
-function get_prediccion_montaña(area, dia){
+async function get_prediccion_montaña(nombre,codigo, get_datos){
+    const URL = 'https://opendata.aemet.es/opendata/api/prediccion/especifica/monta%C3%B1a/pasada/area/' + codigo + '/dia/0/?api_key=' + API_KEY;
 
-    // ...
-    // lógica de API externa
-    // ...
+    var datos = await get_datos(URL);
+    var json  = await datos.json();
 
-    // convertir a clase Meteo
+    var estado_cielo = json[0].seccion[0].apartado[0].texto;
+    var precipitaciones = json[0].seccion[0].apartado[1].texto;
+    var tormentas = json[0].seccion[0].apartado[2].texto;
+    var temperaturas = json[0].seccion[0].apartado[3].texto;
+    var fecha = new Date().toJSON().slice(0,10);
+
+    var montaña = new MeteoMontaña(nombre,estado_cielo,precipitaciones,tormentas,temperaturas,fecha);
+    return montaña;
 }
-
 
 function get_Riesgo_Incendio(){
 

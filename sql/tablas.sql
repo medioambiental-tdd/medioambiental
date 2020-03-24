@@ -79,3 +79,28 @@ INSERT INTO provincia (codigo, nombre) VALUES ("47", "valladolid");
 INSERT INTO provincia (codigo, nombre) VALUES ("48", "bizkaia");
 INSERT INTO provincia (codigo, nombre) VALUES ("49", "zamora");
 INSERT INTO provincia (codigo, nombre) VALUES ("50", "zaragoza");
+
+CREATE TABLE IF NOT EXISTS montaña(
+    codigo TEXT PRIMARY KEY,
+    nombre TEXT);
+
+INSERT INTO montaña (codigo, nombre) VALUES ("arn2", "iberica_aragonesa");
+INSERT INTO montaña (codigo, nombre) VALUES ("rio1", "iberica_riojana");
+INSERT INTO montaña (codigo, nombre) VALUES ("peu1", "picos_europa");
+INSERT INTO montaña (codigo, nombre) VALUES ("arn1", "pirineo_aragones");
+INSERT INTO montaña (codigo, nombre) VALUES ("cat1", "pirineo_catalan");
+INSERT INTO montaña (codigo, nombre) VALUES ("nav1", "pirineo_navarro");
+INSERT INTO montaña (codigo, nombre) VALUES ("gre1", "sierra_gredos");
+INSERT INTO montaña (codigo, nombre) VALUES ("nev1", "sierra_nevada");
+INSERT INTO montaña (codigo, nombre) VALUES ("mad2", "somosierra");
+
+CREATE TABLE IF NOT EXISTS prediccion_montaña(
+    nombre TEXT PRIMARY KEY,
+    estado_cielo TEXT,
+    precipitaciones TEXT,
+    tormentas TEXT,
+    temperaturas TEXT,
+    fecha TEXT,
+
+    FOREIGN KEY (nombre) REFERENCES montaña(nombre)
+);

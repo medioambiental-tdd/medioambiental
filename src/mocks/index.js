@@ -3,6 +3,7 @@ const app           = express();
 const PORT          = process.env.PORT || 5000;
 const ops_municipio = require('./ops_municipio');
 const ops_textual   = require('./ops_textual'); 
+const ops_montaña   = require('./ops_montaña'); 
 
 // Body parser
 app.use(express.json());
@@ -76,6 +77,21 @@ app.get('/tiempo/prediccion/:municipio', (req,res) =>{
         }
     });
 
+
+    app.get('/tiempo/montaña/:nombre', (req,res)=>{
+        ops_montaña.consultar(req.params.nombre,function(montaña){
+            var json = {
+                nombre: montaña.getNombre(),
+                estado_cielo: montaña.getEstadoCielo(),
+                precipitaciones: montaña.getPrecipitaciones(),
+                tormentas: montaña.getTormentas(),
+                temperaturas: montaña.getTemperaturas(),
+                fecha: montaña.getFecha()
+            };
+    
+            res.json(json);
+        });
+    });
 });
 
 var server = app.listen(PORT, () => console.log(`Servidor iniciado en puerto: ${PORT}`));

@@ -5,6 +5,7 @@ const peticiones    = require('./services/peticiones');
 const predicciones  = require('./services/predicciones');
 const ops_municipio = require('./model/ops_municipio');
 const ops_textual   = require('./model/ops_textual'); 
+const ops_montaña   = require('./model/ops_montaña');
 
 // Body parser
 app.use(express.json());
@@ -75,6 +76,21 @@ app.get('/tiempo/textual/:zona',(req,res) =>{
             }
             res.send(json);
         }
+    });
+});
+
+app.get('/tiempo/montaña/:nombre', (req,res)=>{
+    ops_montaña.consultar(req.params.nombre,predicciones,peticiones,function(montaña){
+        var json = {
+            nombre: montaña.getNombre(),
+            estado_cielo: montaña.getEstadoCielo(),
+            precipitaciones: montaña.getPrecipitaciones(),
+            tormentas: montaña.getTormentas(),
+            temperaturas: montaña.getTemperaturas(),
+            fecha: montaña.getFecha()
+        };
+
+        res.json(json);
     });
 });
 
