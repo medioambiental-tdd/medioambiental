@@ -1,8 +1,8 @@
 // variables de entorno
 require('dotenv').config();
 const API_KEY = process.env.AEMET_API_KEY;
-const MeteoTextual = require('../model/MeteoTextual')
-const MeteoMunicipio=require('../model/MeteoMunicipio');
+const MeteoTextual = require('../libs/MeteoTextual')
+const MeteoMunicipio=require('../libs/MeteoMunicipio');
 
 async function get_prediccion_municipio(municipio,get_datos){
     const URL = 'https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/'+municipio+'/?api_key=' + API_KEY;

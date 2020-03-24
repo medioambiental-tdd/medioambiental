@@ -1,14 +1,15 @@
-const express = require('express');
-const app     = express();
-const PORT = process.env.PORT || 5000;
-var operaciones = require('./operaciones')
+const express       = require('express');
+const app           = express();
+const PORT          = process.env.PORT || 5000;
+const ops_municipio = require('./ops_municipio');
+const ops_textual   = require('./ops_textual'); 
 
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 app.get('/tiempo/:municipio',(req,res) =>{
-    operaciones.getDatoTextual(req.params.municipio,function(mt){
+    ops_textual.consultar(req.params.municipio,function(mt){
         var json = {
             zona: mt.getZona(),
             fecha: mt.getDia(),
@@ -20,7 +21,7 @@ app.get('/tiempo/:municipio',(req,res) =>{
 });
 
 app.get('/tiempo/prediccion/:municipio', (req,res) =>{
-    operaciones.getDatoMunicipio(req.params.municipio,function(mm){
+    ops_municipio.consultar(req.params.municipio,function(mm){
         if(mm=='No existe tal municipio')
             res.status(400).send(mm);
         else{

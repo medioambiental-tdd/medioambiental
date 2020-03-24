@@ -1,14 +1,6 @@
-const MeteoTextual = require('../model/MeteoTextual');
-const MeteoMunicipio = require('../model/MeteoMunicipio');
+const MeteoMunicipio = require('../libs/MeteoMunicipio');
 
-function getDatoTextual(zona,callback){
-    var hoy = new Date().toJSON().slice(0,10);
-    mt = new MeteoTextual('andalucia',hoy,'texto');
-
-    return callback(mt);
-}
-
-function getDatoMunicipio(municipio,callback){
+function consultar(municipio,callback){
     if(municipio=="Granada"){
         var hoy=new Date().toJSON().slice(0,10);
         var nombre="Granada";
@@ -26,7 +18,7 @@ function getDatoMunicipio(municipio,callback){
 
     return callback(mm);
 }
+
 module.exports = {
-    getDatoTextual,
-    getDatoMunicipio
+    consultar
 }

@@ -1,5 +1,5 @@
 class RiesgoIncendio{
-    constuctor(){
+    constructor(){
         this.zona=null;
         this.grafico=null;
         this.codigo=null;

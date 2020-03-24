@@ -4,8 +4,8 @@ var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 const predicciones  = require('../src/services/predicciones');
 const peticiones = require('../src/mocks/peticiones');
-const MeteoTextual = require('../src/model/MeteoTextual');
-const MeteoMunicipio = require ('../src/model/MeteoMunicipio');
+const MeteoTextual = require('../src/libs/MeteoTextual');
+const MeteoMunicipio = require ('../src/libs/MeteoMunicipio');
 
 describe('Tests unitarios para las llamadas a APIs externas', function(){
     it('Debería cargar la biblioteca de predicciones y poder instanciarse',function(){
