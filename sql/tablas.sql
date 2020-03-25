@@ -104,3 +104,5 @@ CREATE TABLE IF NOT EXISTS prediccion_montaña(
 
     FOREIGN KEY (nombre) REFERENCES montaña(nombre)
 );
+
+insert into codMunicipios (CODAUTO, CPRO,CMUN, DC, NOMBRE) VALUES (9,99,99,9,"municipio_test");
