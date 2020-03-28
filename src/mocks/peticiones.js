@@ -259,17 +259,13 @@ var datosPlaya={
 }
 
 var datosIncendio={
-   json(){
-     var j={
+    
       descripcion : "exito",
       estado : 200,
       datos : "https://opendata.aemet.es/opendata/sh/88ff3ad8",
       metadatos : "https://opendata.aemet.es/opendata/sh/fa09a9f6"
-     }
-     return j;
-  }
 }
-
+ 
         
 function get_datos_api_externa(URL){
       // segun URL devolver datos diferentes

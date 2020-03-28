@@ -15,6 +15,8 @@ class MeteoMunicipio{
         return this.estado_cielo;
     }
 
+
+
     getProbPrecipitacion(){
        return this.prob_precipitacion;
     }

@@ -9,7 +9,7 @@ function consultar(playa,predicciones,peticiones,callback){
         else{
             var fecha = new Date().toJSON().slice(0,10);
             if(res[0]==null||res[0].fecha != fecha){
-                db.conn.all(`SELECT IDPLAYA FROM codPlayas where NOMBREPLAYA = ? `,[playa],async (err,rows) =>{
+                db.conn.all(`SELECT NOMBREPLAYA,IDPLAYA FROM codPlayas where NOMBREPLAYA = ? `,[playa],async (err,rows) =>{
                     if(err)
                         throw err;
                     else{
@@ -22,9 +22,9 @@ function consultar(playa,predicciones,peticiones,callback){
                         var fecha = new Date().toJSON().slice(0,10);
         
                         if(res[0]==null)
-                            insertar(datos,callback);
+                            insertar(datos,rows[0].NOMBREPLAYA,callback);
                         else
-                            actualizar(datos,callback);
+                            actualizar(datos,rows[0].NOMBREPLAYA,callback);
                     }
                 });
             }else{
@@ -43,32 +43,10 @@ function consultar(playa,predicciones,peticiones,callback){
     });
 }
 
-/*function actualizarDatos(playa,predicciones,peticiones,callback){
-    db.conn.all(`SELECT IDPLAYA FROM codPlayas where NOMBREPLAYA = ? `,[playa],async (err,rows) =>{
-        if(err)
-            throw err;
-        else{
-            if(rows[0]==null)  
-                return callback('No existe tal playa');
-                
-            if(rows[0].IDPLAYA.toString().length<7){
-                var s='0'+rows[0].IDPLAYA.toString();
-            }else{
-                var s=rows[0].IDPLAYA.toString();
-            }
-            var datos = await predicciones.get_prediccion_playa(s,peticiones.get_datos_api_externa);
-            var fecha = new Date().toJSON().slice(0,10);
 
-            if(rows[0].FECHA != fecha)
-                actualizar(datos,callback);
-            else
-                insertar(datos,callback);
-        }
-    });
-}*/
 
-function actualizar(datos,callback){
-    var nombre  = datos.getNombrePlaya();
+function actualizar(datos,n,callback){
+    var nombre = datos.getNombrePlaya();
     var fecha   = datos.getFecha();
     var eCielo  = datos.getEstadoCielo();
     var viento = datos.getViento();
@@ -78,17 +56,17 @@ function actualizar(datos,callback){
    
     db.conn.run(`UPDATE playas SET fecha=?, e1=?,e2=?,v1=?,v2=?,o1=?,o2=?,tm=?,ta=? WHERE nombre=?`,
                                         [fecha,eCielo[0],eCielo[1],viento[0],viento[1],oleaje[0],
-                                        oleaje[1],temp_max,temp_agua,nombre],(err)=>{
+                                        oleaje[1],temp_max,temp_agua,n],(err)=>{
                         if(err)
                             throw err;
                     });
 
-    mp= new MeteoPlaya(nombre,fecha,eCielo,viento,oleaje,temp_agua,temp_max);
+    mp= new MeteoPlaya(n,fecha,eCielo,viento,oleaje,temp_agua,temp_max);
     return callback(mp);
 }
 
-function insertar(datos,callback){
-    var nombre  = datos.getNombrePlaya();
+function insertar(datos,n,callback){
+    var nombre = datos.getNombrePlaya();
     var fecha   = datos.getFecha();
     var eCielo  = datos.getEstadoCielo();
     var viento = datos.getViento();
@@ -97,13 +75,13 @@ function insertar(datos,callback){
     var temp_max   = datos.getTempMax();
    
     db.conn.run(`INSERT INTO playas  (nombre,fecha, e1,e2,v1,v2,o1,o2,tm,ta) VALUES (?,?,?,?,?,?,?,?,?,?)`,
-                                        [nombre,fecha,eCielo[0],eCielo[1],viento[0],viento[1],oleaje[0],
+                                        [n,fecha,eCielo[0],eCielo[1],viento[0],viento[1],oleaje[0],
                                         oleaje[1],temp_max,temp_agua],(err)=>{
                         if(err)
                             throw err;
                     });
 
-    mp= new MeteoPlaya(nombre,fecha,eCielo,viento,oleaje,temp_agua,temp_max);
+    mp= new MeteoPlaya(n,fecha,eCielo,viento,oleaje,temp_agua,temp_max);
     return callback(mp);
 }
 

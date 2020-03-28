@@ -109,7 +109,6 @@ describe('Tests para operaciones con municipios', function(){
     it('Debería poder insertar datos de municipio', function(done){
         expect(ops_municipio.consultar('municipio_test',predicciones,peticiones,function(mm){
 
-            console.log(mm.getNombreMunicipio());
             var hoy = new Date().toJSON().slice(0,10);            
             expect(mm).to.be.an.instanceOf(MeteoMunicipio);
             expect(mm.getNombreMunicipio()).to.equal("municipio_test");
@@ -160,7 +159,7 @@ describe('Tests para operaciones con municipios', function(){
     
         mm= new MeteoMunicipio(nombre,fecha,estadoCielo,probPrecipitacion,cotaNieve,temperatura,sensTermica,velocidadViento,direccionViento); 
 
-        ops_municipio.actualizar(mm,function(res){
+        ops_municipio.actualizar(mm,'municipio_test',function(res){
             expect(res).to.be.an.instanceof(MeteoMunicipio);
             expect(res.getFecha()).to.equal(fecha);
 
@@ -333,7 +332,7 @@ describe('Tests para operaciones con montañas', function(){
             fecha = fecha.toJSON().slice(0,10);
            var  mp=new MeteoPlaya(nombre,fecha,e,viento,oleaje,ta,tm);
     
-            ops_playa.actualizar(mp,function(res){
+            ops_playa.actualizar(mp,'Calahonda',function(res){
                 expect(res).to.be.an.instanceof(MeteoPlaya);
                 expect(res.getFecha()).to.equal(fecha);
     
@@ -446,7 +445,7 @@ describe('Tests para operaciones con incendios', function(){
     });
 
     it('Debería poder consultar datos de incendio', function(done){
-        ops_incendio.consultar('península',predicciones,peticiones,function(res){
+        ops_incendio.consultar('peninsula',predicciones,peticiones,function(res){
             var hoy = new Date().toJSON().slice(0,10);
             expect(res).to.be.an.instanceof(MeteoIncendio);
             expect(res.getZona()).to.equal('peninsula');

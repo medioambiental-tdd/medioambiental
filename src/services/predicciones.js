@@ -143,8 +143,7 @@ async function get_Riesgo_Incendio(area,get_datos){
             zona='Canarias';
         break;
     }
-    console.log(datos.json().datos);
-   var grafico='<html><img src="'+datos.json().datos+'"></html>';
+   var grafico='<html><img src="'+datos.datos+'"></html>';
     gi= new MeteoIncendio(zona,new Date().toJSON().slice(0,10).toString(),grafico);
     return gi;
 }

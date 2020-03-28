@@ -3,12 +3,12 @@ const db = new DB('data/database.sqlite3');
 const MeteoIncendio = require('../libs/MeteoIncendio');
 
 function consultar(area,predicciones,peticiones,callback){
-    if(area!='península'&&area!='Baleares'&&area!='Canarias'){
+    if(area!='peninsula'&&area!='Baleares'&&area!='Canarias'){
          return callback('No existe tal mapa de incendio')
     }else{
         var zona='ninguna';
         switch(area){
-            case 'península':
+            case 'peninsula':
                 zona='p';
             break;
     
