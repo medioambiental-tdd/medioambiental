@@ -7,6 +7,7 @@ const ops_municipio = require('./model/ops_municipio');
 const ops_textual   = require('./model/ops_textual'); 
 const ops_montaña   = require('./model/ops_montaña');
 const ops_playa   = require('./model/ops_playa');
+const ops_incendio   = require('./model/ops_incendio');
 
 // Body parser
 app.use(express.json());
@@ -100,13 +101,13 @@ app.get('/contaminacion',(req,res)=>{
     res.send(data);
 });
 
-app.get('/tiempo/prediccion/:playa', (req,res) =>{
+app.get('/tiempo/prediccion/playa/:playa', (req,res) =>{
     ops_playa.consultar(req.params.playa,predicciones,peticiones,function(mp){
         if(mp=='No existe tal playa'){
             res.json(mp);
         }else{
             var json = {
-                municipio: mp.getNombreMunicipio(),
+                municipio: mp.getNombrePlaya(),
                 fecha: mp.getFecha(),
                 estadoCielo: [
                     {periodo:"Por la mañana",valor:mp.getEstadoCielo()[0]},
@@ -117,8 +118,8 @@ app.get('/tiempo/prediccion/:playa', (req,res) =>{
                     {periodo:"Por la tarde",valor:mp.getViento()[1]},
                 ],
                 Oleaje: [
-                    {periodo:"Por la mañana",valor:mp.getOleaje[0]},
-                    {periodo:"Por la tarde",valor:mp.getOleaje[1]},
+                    {periodo:"Por la mañana",valor:mp.getOleaje()[0]},
+                    {periodo:"Por la tarde",valor:mp.getOleaje()[1]},
                 ],
                 temperaturaAgua: [
                     {periodo:"diario",valor:mp.getTempAgua()},
@@ -130,6 +131,16 @@ app.get('/tiempo/prediccion/:playa', (req,res) =>{
             res.send(json);
         }
  });
+});
+
+app.get('/incendio/:area',(req,res)=>{
+    ops_incendio.consultar(req.params.area,predicciones,peticiones,function(gi){
+        if(gi=='No existe tal mapa de incendio'){
+            res.json(gi);
+        }else{
+          res.send(gi.getGrafico());
+        }
+    });
 });
 
 app.listen(PORT, () =>{

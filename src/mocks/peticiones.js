@@ -188,6 +188,88 @@ var datosMunicipio={
         }];
     }
 }
+
+
+var datosPlaya={
+  status: 200,
+  json(){
+      return [ {
+        "elaborado" : new Date().toJSON().slice(0,10),
+        "nombre" : "Calahonda",
+        "localidad" : 18140,
+        "prediccion" : {
+          "dia" : [ {
+            "estadoCielo" : {
+              "value" : "",
+              "f1" : 100,
+              "descripcion1" : "despejado",
+              "f2" : 100,
+              "descripcion2" : "despejado"
+            },
+            "viento" : {
+              "value" : "",
+              "f1" : 220,
+              "descripcion1" : "moderado",
+              "f2" : 220,
+              "descripcion2" : "moderado"
+            },
+            "oleaje" : {
+              "value" : "",
+              "f1" : 320,
+              "descripcion1" : "moderado",
+              "f2" : 320,
+              "descripcion2" : "moderado"
+            },
+            "tMaxima" : {
+              "value" : "",
+              "valor1" : 19
+            },
+            "sTermica" : {
+              "value" : "",
+              "valor1" : 440,
+              "descripcion1" : "fresco"
+            },
+            "tAgua" : {
+              "value" : "",
+              "valor1" : 15
+            },
+            "uvMax" : {
+              "value" : "",
+              "valor1" : 6
+            },
+            "fecha" : 20200326,
+            "tmaxima" : {
+              "value" : "",
+              "valor1" : 19
+            },
+            "stermica" : {
+              "value" : "",
+              "valor1" : 440,
+              "descripcion1" : "fresco"
+            },
+            "tagua" : {
+              "value" : "",
+              "valor1" : 15
+            }
+          } ]
+        },
+        "id" : 1814008
+      } ];
+  }
+}
+
+var datosIncendio={
+   json(){
+     var j={
+      descripcion : "exito",
+      estado : 200,
+      datos : "https://opendata.aemet.es/opendata/sh/88ff3ad8",
+      metadatos : "https://opendata.aemet.es/opendata/sh/fa09a9f6"
+     }
+     return j;
+  }
+}
+
         
 function get_datos_api_externa(URL){
       // segun URL devolver datos diferentes
@@ -197,9 +279,23 @@ function get_datos_api_externa(URL){
           return datosMontaña;
       }
       else 
+      if(URL.includes('municipio')){
         return datosMunicipio;
+      }else{
+        if(URL.includes('playa')){
+          return datosPlaya;
+        }
+      }
+}
+
+function get_datosIncendio_api_externa(URL){
+      if(URL.includes('incendio')){
+        return datosIncendio;
+      }
+  
 }
 
 module.exports = {
-    get_datos_api_externa
+    get_datos_api_externa,
+    get_datosIncendio_api_externa
 }

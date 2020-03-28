@@ -4,6 +4,9 @@ const API_KEY        = process.env.AEMET_API_KEY;
 const MeteoTextual   = require('../libs/MeteoTextual')
 const MeteoMunicipio = require('../libs/MeteoMunicipio');
 const MeteoMontaña   = require('../libs/MeteoMontaña');
+const MeteoPlaya   = require('../libs/MeteoPlaya');
+const MeteoIncendio   = require('../libs/MeteoIncendio');
+
 
 async function get_prediccion_municipio(municipio,get_datos){
     const URL = 'https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/'+municipio+'/?api_key=' + API_KEY;
@@ -76,10 +79,35 @@ async function get_prediccion_textual(zona, get_datos){
     return mt;
 }
 
-function get_prediccion_playa(codigo,get_datos){
+async function get_prediccion_playa(codigo,get_datos){
     const URL='https://opendata.aemet.es/opendata/api/prediccion/especifica/playa/'+codigo+'/?api_key=' + API_KEY;
     var datos=await get_datos(URL);
     var json= await datos.json();
+
+    var nombre=json[0].nombre;
+    var fecha=json[0].elaborado.slice(0,10);
+    
+    var estadoCielo=[
+        json[0].prediccion.dia[0].estadoCielo.descripcion1,
+        json[0].prediccion.dia[0].estadoCielo.descripcion2
+    ];
+
+    var viento=[
+        json[0].prediccion.dia[0].viento.descripcion1,
+        json[0].prediccion.dia[0].viento.descripcion2
+    ];
+
+    var oleaje=[
+        json[0].prediccion.dia[0].oleaje.descripcion1,
+        json[0].prediccion.dia[0].oleaje.descripcion2
+    ];
+
+    var tagua=json[0].prediccion.dia[0].tAgua.valor1;
+    var tmax=json[0].prediccion.dia[0].tMaxima.valor1;
+
+    mp=new MeteoPlaya(nombre,fecha,estadoCielo,viento,oleaje,tagua,tmax);
+    return mp;
+
 }
 
 async function get_prediccion_montaña(nombre,codigo, get_datos){
@@ -98,9 +126,29 @@ async function get_prediccion_montaña(nombre,codigo, get_datos){
     return montaña;
 }
 
-function get_Riesgo_Incendio(){
+async function get_Riesgo_Incendio(area,get_datos){
+    const URL='https://opendata.aemet.es/opendata/api/incendios/mapasriesgo/estimado/area/'+area+'/?api_key='+API_KEY;
+    var datos = await get_datos(URL);
+    var zona='ninguna';
+    switch(area){
+        case 'p':
+            zona='peninsula';
+        break;
 
+        case 'b':
+            zona='Baleares';
+        break;
+
+        case 'c':
+            zona='Canarias';
+        break;
+    }
+    console.log(datos.json().datos);
+   var grafico='<html><img src="'+datos.json().datos+'"></html>';
+    gi= new MeteoIncendio(zona,new Date().toJSON().slice(0,10).toString(),grafico);
+    return gi;
 }
+
 
 
 

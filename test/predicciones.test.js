@@ -8,6 +8,8 @@ const MeteoTextual    = require('../src/libs/MeteoTextual');
 const MeteoMunicipio  = require('../src/libs/MeteoMunicipio');
 const MeteoMontaña    = require('../src/libs/MeteoMontaña');
 const MeteoPlaya      = require('../src/libs/MeteoPlaya');
+const MeteoIncendio      = require('../src/libs/MeteoIncendio');
+
 
 describe('Tests unitarios para las llamadas a APIs externas', function(){
     it('Debería cargar la biblioteca de predicciones y poder instanciarse',function(){
@@ -32,6 +34,11 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
 
     it('Debería cargar la clase MeteoPlaya y poder instanciarse',function(){
         expect(MeteoPlaya).to.exist
+    });
+
+
+    it('Debería cargar la clase MeteoIncendio y poder instanciarse',function(){
+        expect(MeteoIncendio).to.exist
     });
 
     it('Debería devolver un objeto de la clase MeteoTextual con datos válidos', async() =>{
@@ -87,9 +94,20 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
         expect(mp.getEstadoCielo()).to.have.lengthOf(2);
         expect(mp.getOleaje()).to.have.lengthOf(2);
         expect(mp.getViento()).to.have.lengthOf(2);
-        expect(mp.getTempAgua()).to.equal(16);
-        expect(mp.getTempMax()).to.be.an.integer(18);
+        expect(mp.getTempAgua()).to.equal(15);
+        expect(mp.getTempMax()).to.equal(19);
 
+
+    });
+
+    it('Debería devolver un objeto de la clase MeteoIncendio con datos válidos',async()=>{
+        gi= await predicciones.get_Riesgo_Incendio('c',peticiones.get_datosIncendio_api_externa);
+        var hoy = new Date().toJSON().slice(0,10);
+        
+        expect(gi).to.be.an.instanceOf(MeteoIncendio);
+        expect(gi.getZona()).to.equal("Canarias");
+        expect(gi.getFecha()).to.equal(hoy);
+        expect(gi.getGrafico()).to.be.a('String');
 
     });
 });
