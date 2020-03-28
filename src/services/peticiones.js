@@ -6,7 +6,6 @@ async function get_datos_api_externa(URL){
     try{
         var respuesta = await fetch(URL);
         var json = await respuesta.json();
-        console.log(URL);
         if(!json.datos){
             throw new Error('Error en la URL para la petición');
         }
@@ -19,6 +18,23 @@ async function get_datos_api_externa(URL){
     return resp;
 }
 
+async function get_datosIncendio_api_externa(URL){
+    try{
+        var respuesta = await fetch(URL);
+        var json = await respuesta.json();
+        if(!json.datos){
+            throw new Error('Error en la URL para la petición');
+        }
+
+       
+    }catch(error){
+        throw error;
+    }
+
+    return json;
+}
+
 module.exports = {
-    get_datos_api_externa
+    get_datos_api_externa,
+    get_datosIncendio_api_externa
 }

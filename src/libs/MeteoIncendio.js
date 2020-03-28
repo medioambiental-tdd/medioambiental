@@ -1,28 +1,24 @@
-class RiesgoIncendio{
-    constructor(){
-        this.zona=null;
-        this.grafico=null;
-        this.codigo=null;
-        this.fecha=null;
+class MeteoIncendio{
+    constructor(zona,fecha,grafico){
+        this.zona=zona;
+        this.grafico=grafico;
+        this.fecha=fecha;
     }
 
-    ComprobarExisteZona(){
-
-    }
-
-    PedirRiesgoIncendio(zona){
-
-    }
+    
 
     getZona(){
-
+        return this.zona;
     }
 
-    getCodigo(){
-
+    getFecha(){
+        return this.fecha;
     }
+  
 
     getGrafico(){
-        
+        return this.grafico;
     }
 }
+
+module.exports = MeteoIncendio;

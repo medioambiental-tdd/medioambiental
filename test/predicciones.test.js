@@ -7,6 +7,9 @@ const peticiones      = require('../src/mocks/peticiones');
 const MeteoTextual    = require('../src/libs/MeteoTextual');
 const MeteoMunicipio  = require('../src/libs/MeteoMunicipio');
 const MeteoMontaña    = require('../src/libs/MeteoMontaña');
+const MeteoPlaya      = require('../src/libs/MeteoPlaya');
+const MeteoIncendio      = require('../src/libs/MeteoIncendio');
+
 
 describe('Tests unitarios para las llamadas a APIs externas', function(){
     it('Debería cargar la biblioteca de predicciones y poder instanciarse',function(){
@@ -29,6 +32,15 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
         expect(MeteoMontaña).to.exist
     });
 
+    it('Debería cargar la clase MeteoPlaya y poder instanciarse',function(){
+        expect(MeteoPlaya).to.exist
+    });
+
+
+    it('Debería cargar la clase MeteoIncendio y poder instanciarse',function(){
+        expect(MeteoIncendio).to.exist
+    });
+
     it('Debería devolver un objeto de la clase MeteoTextual con datos válidos', async() =>{
         mt = await predicciones.get_prediccion_textual('and',peticiones.get_datos_api_externa);
         var hoy = new Date().toJSON().slice(0,10);
@@ -44,7 +56,7 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
         var hoy = new Date().toJSON().slice(0,10);
         
         expect(mm).to.be.an.instanceOf(MeteoMunicipio);
-        expect(mm.getNombreMunicipio()).to.equal("Granada");
+        expect(mm.getNombreMunicipio()).to.equal("municipio_test");
         expect(mm.getFecha()).to.equal(hoy);
         expect(mm.getEstadoCielo()).to.have.lengthOf(4);
         expect(mm.getProbPrecipitacion()).to.have.lengthOf(4);
@@ -69,5 +81,33 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
 
         mt.setFecha("2020-03-21");
         expect(mt.getFecha()).to.equal("2020-03-21");
+    });
+
+
+    it('Debería devolver un objeto de la clase MeteoPlaya con datos válidos',async()=>{
+        mp= await predicciones.get_prediccion_playa(1814008,peticiones.get_datos_api_externa);
+        var hoy = new Date().toJSON().slice(0,10);
+        
+        expect(mp).to.be.an.instanceOf(MeteoPlaya);
+        expect(mp.getNombrePlaya()).to.equal("Calahonda");
+        expect(mp.getFecha()).to.equal(hoy);
+        expect(mp.getEstadoCielo()).to.have.lengthOf(2);
+        expect(mp.getOleaje()).to.have.lengthOf(2);
+        expect(mp.getViento()).to.have.lengthOf(2);
+        expect(mp.getTempAgua()).to.equal(15);
+        expect(mp.getTempMax()).to.equal(19);
+
+
+    });
+
+    it('Debería devolver un objeto de la clase MeteoIncendio con datos válidos',async()=>{
+        gi= await predicciones.get_Riesgo_Incendio('c',peticiones.get_datosIncendio_api_externa);
+        var hoy = new Date().toJSON().slice(0,10);
+        
+        expect(gi).to.be.an.instanceOf(MeteoIncendio);
+        expect(gi.getZona()).to.equal("Canarias");
+        expect(gi.getFecha()).to.equal(hoy);
+        expect(gi.getGrafico()).to.be.a('String');
+
     });
 });

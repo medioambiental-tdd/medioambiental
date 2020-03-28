@@ -1,11 +1,15 @@
 const ops_municipio  = require('../src/model/ops_municipio');
 const ops_textual    = require('../src/model/ops_textual'); 
 const ops_montaña    = require('../src/model/ops_montaña');
+const ops_playa    = require('../src/model/ops_playa');
+const ops_incendio    = require('../src/model/ops_incendio');
 const predicciones   = require('../src/services/predicciones');
 const peticiones     = require('../src/mocks/peticiones');
 const MeteoTextual   = require('../src/libs/MeteoTextual');
 const MeteoMunicipio = require ('../src/libs/MeteoMunicipio');
 const MeteoMontaña   = require ('../src/libs/MeteoMontaña');
+const MeteoPlaya   = require ('../src/libs/MeteoPlaya');
+const MeteoIncendio      = require('../src/libs/MeteoIncendio');
 const chai           = require('chai');
 const expect         = chai.expect;
 const chaiAsPromised = require("chai-as-promised");
@@ -102,20 +106,12 @@ describe('Tests para operaciones con municipios', function(){
         expect(ops_municipio).to.exist
     });
 
-
-    it('Debería poder actualizar los datos de un municipio', function(done){
-        ops_municipio.actualizarDatos('Sevilla',predicciones,peticiones,function(mm){
-            expect(mm).to.be.an.instanceof(MeteoMunicipio);
-            done();
-        });
-    });
-
-    it('Debería poder comprobar datos de municipio', function(done){
-        expect(ops_municipio.consultar('Granada',predicciones,peticiones,function(mm){
+    it('Debería poder insertar datos de municipio', function(done){
+        expect(ops_municipio.consultar('municipio_test',predicciones,peticiones,function(mm){
 
             var hoy = new Date().toJSON().slice(0,10);            
             expect(mm).to.be.an.instanceOf(MeteoMunicipio);
-            expect(mm.getNombreMunicipio()).to.equal("Granada");
+            expect(mm.getNombreMunicipio()).to.equal("municipio_test");
             expect(mm.getFecha()).to.equal(hoy);
             expect(mm.getEstadoCielo()).to.have.lengthOf(4);
             expect(mm.getProbPrecipitacion()).to.have.lengthOf(4);
@@ -129,11 +125,11 @@ describe('Tests para operaciones con municipios', function(){
         })).to.not.throw;
     });
 
-    it('Debería poder comprobar datos de municipio', function(done){
-        expect(ops_municipio.consultar('Motril',predicciones,peticiones,function(mm){
+    it('Debería poder consultar datos de municipio', function(done){
+        expect(ops_municipio.consultar('municipio_test',predicciones,peticiones,function(mm){
             var hoy = new Date().toJSON().slice(0,10);            
             expect(mm).to.be.an.instanceOf(MeteoMunicipio);
-            expect(mm.getNombreMunicipio()).to.equal("Motril");
+            expect(mm.getNombreMunicipio()).to.equal("municipio_test");
             expect(mm.getFecha()).to.equal(hoy);
             expect(mm.getEstadoCielo()).to.have.lengthOf(4);
             expect(mm.getProbPrecipitacion()).to.have.lengthOf(4);
@@ -147,17 +143,35 @@ describe('Tests para operaciones con municipios', function(){
         })).to.not.throw;
     });
 
+    it('Debería poder actualizar datos de un municipio', function(done){
+        var nombre='municipio_test';
+        var fecha           = new Date();
+        fecha.setDate(fecha.getDate() - 1);
+        fecha = fecha.toJSON().slice(0,10);
 
-    it('Debería poder insertar un municipio',async function(){
-        ops_municipio.eliminar('Granada');
+        var probPrecipitacion=[0,0,100,5];
+        var cotaNieve=["","","2400",""];
+        var estadoCielo=["","Intervalos nubosos con lluvia","",""];
+        var temperatura=[9,18,17,11];
+        var sensTermica=[9,18,17,11];
+        var velocidadViento=[0,0,0,0];
+        var direccionViento=["N","N","W","N"];
+    
+        mm= new MeteoMunicipio(nombre,fecha,estadoCielo,probPrecipitacion,cotaNieve,temperatura,sensTermica,velocidadViento,direccionViento); 
 
+        ops_municipio.actualizar(mm,'municipio_test',function(res){
+            expect(res).to.be.an.instanceof(MeteoMunicipio);
+            expect(res.getFecha()).to.equal(fecha);
 
-        var datos = await predicciones.get_prediccion_municipio('Granada',peticiones.get_datos_api_externa);
-        ops_municipio.insertar(datos,function(mm){
+            done();
+        });
+    });
 
+    it('Debería poder consultar datos de municipio', function(done){
+        expect(ops_municipio.consultar('municipio_test',predicciones,peticiones,function(mm){
             var hoy = new Date().toJSON().slice(0,10);            
             expect(mm).to.be.an.instanceOf(MeteoMunicipio);
-            expect(mm.getNombreMunicipio()).to.equal("Granada");
+            expect(mm.getNombreMunicipio()).to.equal("municipio_test");
             expect(mm.getFecha()).to.equal(hoy);
             expect(mm.getEstadoCielo()).to.have.lengthOf(4);
             expect(mm.getProbPrecipitacion()).to.have.lengthOf(4);
@@ -167,11 +181,15 @@ describe('Tests para operaciones con municipios', function(){
             expect(mm.getVelocidadViento()).to.have.lengthOf(4);
             expect(mm.getDireccionViento()).to.have.lengthOf(4);
 
-        });
-
-        ops_municipio.eliminar('Granada');
-        var datos = await predicciones.get_prediccion_municipio('Granada',peticiones.get_datos_api_externa);
+            done();
+        })).to.not.throw;
     });
+
+    it('Debería poder eliminar datos de montaña', function(done){
+        expect(ops_municipio.eliminar('municipio_test')).to.not.throw;
+        done();
+    });
+
 
     it('Debería indicar que un municipio no existe',function(done){
         ops_municipio.consultar('Arkham',predicciones,peticiones,function(mm){
@@ -265,3 +283,202 @@ describe('Tests para operaciones con montañas', function(){
         done();
     });
 });
+    describe('Tests para operaciones con playas', function(){
+        it('Debería cargar la biblioteca de operaciones con playas y poder instanciarse',function(){
+            expect(ops_playa).to.exist
+        });
+
+        it('Debería poder insertar datos de playa', function(done){
+            ops_playa.consultar('Calahonda',predicciones,peticiones,function(res){
+                var hoy = new Date().toJSON().slice(0,10);
+                expect(res).to.be.an.instanceof(MeteoPlaya);
+                expect(res.getNombrePlaya()).to.equal('Calahonda');
+                expect(res.getEstadoCielo()).to.have.lengthOf(2);
+                expect(res.getViento()).to.have.lengthOf(2);
+                expect(res.getOleaje()).to.have.lengthOf(2);
+                expect(res.getTempAgua()).to.equal(15);
+                expect(res.getTempMax()).to.equal(19);
+                expect(res.getFecha()).to.equal(hoy);
+    
+                done();
+            });
+        });
+
+        it('Debería poder consultar datos de playa', function(done){
+            ops_playa.consultar('Calahonda',predicciones,peticiones,function(res){
+                var hoy = new Date().toJSON().slice(0,10);
+                expect(res).to.be.an.instanceof(MeteoPlaya);
+                expect(res.getNombrePlaya()).to.equal('Calahonda');
+                expect(res.getEstadoCielo()).to.have.lengthOf(2);
+                expect(res.getViento()).to.have.lengthOf(2);
+                expect(res.getOleaje()).to.have.lengthOf(2);
+                expect(res.getTempAgua()).to.equal(15);
+                expect(res.getTempMax()).to.equal(19);
+                expect(res.getFecha()).to.equal(hoy);
+    
+                done();
+            });
+        });
+
+        it('Debería poder actualizar datos de playa', function(done){
+            var fecha=new Date();
+            var nombre="Calahonda";
+            var e=["nuboso","nuboso"];
+            var viento=["flojo","flojo"];
+            var oleaje=["moderado","moderado"];
+            var ta=15;
+            var tm=19;
+            fecha.setDate(fecha.getDate() - 1);
+            fecha = fecha.toJSON().slice(0,10);
+           var  mp=new MeteoPlaya(nombre,fecha,e,viento,oleaje,ta,tm);
+    
+            ops_playa.actualizar(mp,'Calahonda',function(res){
+                expect(res).to.be.an.instanceof(MeteoPlaya);
+                expect(res.getFecha()).to.equal(fecha);
+    
+                done();
+            });
+        });
+    
+        it('Debería poder consultar datos de playa', function(done){
+            ops_playa.consultar('Calahonda',predicciones,peticiones,function(res){
+                var hoy = new Date().toJSON().slice(0,10);
+                expect(res).to.be.an.instanceof(MeteoPlaya);
+                expect(res.getNombrePlaya()).to.equal('Calahonda');
+                expect(res.getEstadoCielo()).to.have.lengthOf(2);
+                expect(res.getViento()).to.have.lengthOf(2);
+                expect(res.getOleaje()).to.have.lengthOf(2);
+                expect(res.getTempAgua()).to.equal(15);
+                expect(res.getTempMax()).to.equal(19);
+                expect(res.getFecha()).to.equal(hoy);
+    
+                done();
+            });
+        });
+    
+        it('Debería devolver que no existe dicha playa', function(done){
+            ops_playa.consultar('pep',predicciones,peticiones,function(res){
+                expect(res).to.equal("No existe tal playa");
+                done();
+            });
+        });
+
+        it('Debería poder eliminar datos de playa', function(done){
+            expect(ops_playa.eliminar('Calahonda')).to.not.throw;
+            done();
+        });
+
+    });
+describe('Tests para operaciones con incendios', function(){
+    it('Debería cargar la biblioteca de operaciones con incendios y poder instanciarse',function(){
+        expect(ops_incendio).to.exist
+    });
+
+    it('Debería poder eliminar todos los datos de incendio', function(done){
+        expect(ops_incendio.eliminarDatos()).to.not.throw;
+        done();
+    });
+
+    it('Debería poder insertar datos de incendios', function(done){
+        ops_incendio.consultar('Canarias',predicciones,peticiones,function(res){
+            var hoy = new Date().toJSON().slice(0,10);
+            expect(res).to.be.an.instanceof(MeteoIncendio);
+            expect(res.getZona()).to.equal('Canarias');
+            expect(res.getGrafico()).to.be.a('string');
+            expect(res.getFecha()).to.equal(hoy);
+
+            done();
+        });
+    });
+
+    it('Debería poder consultar datos de incendio', function(done){
+        ops_incendio.consultar('Canarias',predicciones,peticiones,function(res){
+            var hoy = new Date().toJSON().slice(0,10);
+            expect(res).to.be.an.instanceof(MeteoIncendio);
+            expect(res.getZona()).to.equal('Canarias');
+            expect(res.getGrafico()).to.be.a('string');
+            expect(res.getFecha()).to.equal(hoy);
+            done();
+        });
+    });
+
+    it('Debería poder actualizar datos de incendio', function(done){
+       var area='Canarias';
+       var grafico='<html><img src="https://opendata.aemet.es/opendata/sh/88ff3ad8"></html>';
+     var fecha=new Date();
+       fecha.setDate(fecha.getDate() - 1);
+        fecha = fecha.toJSON().slice(0,10);
+       var  gi=new MeteoIncendio(area,fecha,grafico);
+
+        ops_incendio.actualizar(gi,function(res){
+            expect(res).to.be.an.instanceof(MeteoIncendio);
+            expect(res.getFecha()).to.equal(fecha);
+
+            done();
+        });
+    });
+
+    it('Debería poder consultar datos de incendio', function(done){
+        ops_incendio.consultar('Canarias',predicciones,peticiones,function(res){
+            var hoy = new Date().toJSON().slice(0,10);
+            expect(res).to.be.an.instanceof(MeteoIncendio);
+            expect(res.getZona()).to.equal('Canarias');
+            expect(res.getGrafico()).to.be.a('string');
+            expect(res.getFecha()).to.equal(hoy);
+
+
+            done();
+        });
+    });
+
+    it('Debería poder consultar datos de incendio', function(done){
+        ops_incendio.consultar('Baleares',predicciones,peticiones,function(res){
+            var hoy = new Date().toJSON().slice(0,10);
+            expect(res).to.be.an.instanceof(MeteoIncendio);
+            expect(res.getZona()).to.equal('Baleares');
+            expect(res.getGrafico()).to.be.a('string');
+            expect(res.getFecha()).to.equal(hoy);
+
+
+            done();
+        });
+    });
+
+    it('Debería poder consultar datos de incendio', function(done){
+        ops_incendio.consultar('peninsula',predicciones,peticiones,function(res){
+            var hoy = new Date().toJSON().slice(0,10);
+            expect(res).to.be.an.instanceof(MeteoIncendio);
+            expect(res.getZona()).to.equal('peninsula');
+            expect(res.getGrafico()).to.be.a('string');
+            expect(res.getFecha()).to.equal(hoy);
+
+
+            done();
+        });
+    });
+
+    
+
+
+    it('Debería devolver un mensaje de que no existen dichos datos de incendio', function(done){
+        ops_incendio.consultar('caaffaf',predicciones,peticiones,function(res){
+            expect(res).to.equal("No existe tal mapa de incendio");
+            done();
+        });
+    });
+
+    
+
+    it('Debería poder eliminar datos de incendio', function(done){
+        expect(ops_incendio.eliminar('Canarias')).to.not.throw;
+        done();
+    });
+
+    it('Debería poder eliminar todos los datos de incendio', function(done){
+        expect(ops_incendio.eliminarDatos()).to.not.throw;
+        done();
+    });
+
+   
+
+    });

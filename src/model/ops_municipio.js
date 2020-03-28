@@ -9,9 +9,23 @@ function consultar(municipio,predicciones,peticiones,callback){
         else{
             var fecha = new Date().toJSON().slice(0,10);
             if(rows[0]==null||fecha != rows[0].FECHA){
-                actualizarDatos(municipio,predicciones,peticiones,callback);
-                if(callback=='No existe tal municipio')
-                    return callback;
+                db.conn.all(`SELECT NOMBRE,CPRO,CMUN FROM codMunicipios where nombre = ?`,[municipio],async (err,res)=>{
+                    if(err)
+                        throw err;
+                    else{
+                        if(res[0]==null)
+                            return callback('No existe tal municipio');
+
+                        var m=res[0].CPRO*1000+res[0].CMUN;
+                        if(m.toString().length<5)m='0'+m.toString();
+                        var datos = await predicciones.get_prediccion_municipio(m,peticiones.get_datos_api_externa);
+                       
+                        if(rows[0] == null)
+                            insertar(datos,res[0].NOMBRE,callback);
+                        else
+                            actualizar(datos,res[0].NOMBRE,callback);
+                    }
+                });
             }else{
                 var eCielo = [rows[0].e1,rows[0].e2,rows[0].e3,rows[0].e4];
                 var pPrecip= [rows[0].p1,rows[0].p2,rows[0].p3,rows[0].p4];
@@ -28,28 +42,8 @@ function consultar(municipio,predicciones,peticiones,callback){
     });
 }
 
-function actualizarDatos(municipio,predicciones,peticiones,callback){
-    db.conn.all(`SELECT CPRO,CMUN FROM codMunicipios where nombre = ? `,[municipio],async (err,rows) =>{
-        if(err)
-            throw err;
-        else{
-            if(rows[0]==null)  
-                return callback('No existe tal municipio');
-                
-            var m=rows[0].CPRO*1000+rows[0].CMUN;
-            var datos = await predicciones.get_prediccion_municipio(m,peticiones.get_datos_api_externa);
-            var fecha = new Date().toJSON().slice(0,10);
-
-            if(rows[0].FECHA != fecha)
-                actualizar(datos,callback);
-            else
-                insertar(datos,callback);
-        }
-    });
-}
-
-function actualizar(datos,callback){
-    var nombre  = datos.getNombreMunicipio();
+function actualizar(datos,n,callback){
+    var nombre = datos.getNombreMunicipio();
     var fecha   = datos.getFecha();
     var eCielo  = datos.getEstadoCielo();
     var pPrecip = datos.getProbPrecipitacion();
@@ -65,17 +59,17 @@ function actualizar(datos,callback){
                                         pPrecip[1],pPrecip[2],pPrecip[3],cNieve[0],cNieve[1],cNieve[2],
                                         cNieve[3],temp[0],temp[1],temp[2],temp[3],sensT[0],
                                         sensT[1],sensT[2],sensT[3],vViento[0],vViento[1],vViento[2]
-                                        ,vViento[3],dViento[0],dViento[1],dViento[2],dViento[3],nombre],(err)=>{
+                                        ,vViento[3],dViento[0],dViento[1],dViento[2],dViento[3],n],(err)=>{
                         if(err)
                             throw err;
                     });
 
-    mm= new MeteoMunicipio(nombre,fecha,eCielo,pPrecip,cNieve,temp,sensT,vViento,dViento);
+    mm= new MeteoMunicipio(n,fecha,eCielo,pPrecip,cNieve,temp,sensT,vViento,dViento);
     return callback(mm);
 }
 
-function insertar(datos,callback){
-    var nombre  = datos.getNombreMunicipio();
+function insertar(datos,n,callback){
+    var nombre = datos.getNombreMunicipio();
     var fecha   = datos.getFecha();
     var eCielo  = datos.getEstadoCielo();
     var pPrecip = datos.getProbPrecipitacion();
@@ -84,11 +78,10 @@ function insertar(datos,callback){
     var sensT   = datos.getSensacionTermica();
     var vViento = datos.getVelocidadViento();
     var dViento = datos.getDireccionViento();
-    
     db.conn.run(`INSERT INTO municipios (nombre,fecha,e1,e2,e3,e4,p1,p2,p3,p4,c1,c2,c3,c4,t1,
                                                 t2,t3,t4,s1,s2,s3,s4,v1,v2,v3,v4,d1,d2,d3,d4) 
                         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
-                    ,[nombre,fecha,eCielo[0],eCielo[1],eCielo[2],eCielo[3],pPrecip[0],
+                    ,[n,fecha,eCielo[0],eCielo[1],eCielo[2],eCielo[3],pPrecip[0],
                     pPrecip[1],pPrecip[2],pPrecip[3],cNieve[0],cNieve[1],cNieve[2],
                     cNieve[3],temp[0],temp[1],temp[2],temp[3],sensT[0],
                     sensT[1],sensT[2],sensT[3],vViento[0],vViento[1],vViento[2]
@@ -97,7 +90,7 @@ function insertar(datos,callback){
             throw err;
     });
 
-    var mm= new MeteoMunicipio(nombre,fecha,eCielo,pPrecip,cNieve,temp,sensT,vViento,dViento);
+    var mm= new MeteoMunicipio(n,fecha,eCielo,pPrecip,cNieve,temp,sensT,vViento,dViento);
     return callback(mm);
 }
 
@@ -109,10 +102,11 @@ function eliminar(zona){
 }
 
 
+
+
 module.exports = {
     actualizar,
     consultar,
     eliminar,
     insertar,
-    actualizarDatos
 }

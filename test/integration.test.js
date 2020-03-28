@@ -47,4 +47,44 @@ describe("peticiones GET", function(){
                 done();
             });
     });
+
+    it('deberia recibir una predicción meteorológica en json de una playa', function(done){
+        request(app)
+            .get('/tiempo/prediccion/playa/Calahonda')
+            .expect('Content-Type',/json/)
+            .expect(200,done);
+    });
+
+    it('deberia recibir un mensaje de que no existe tal playa', function(done){
+        request(app)
+            .get('/tiempo/prediccion/playa/c')
+            .end(function(err,res){
+                expect('Content-Type',/json/)
+                expect(res.text).to.equal("No existe tal playa")
+                expect(400,done);
+                done();
+            });
+          
+    });
+
+    it('deberia recibir un mapa de incendio correcto', function(done){
+        request(app)
+            .get('/incendio/Canarias')
+            .expect('Content-Type',/html/)
+            .expect(200,done);
+    });
+
+   
+
+    it('deberia recibir un mensaje de que no existe tal incendio', function(done){
+        request(app)
+            .get('/incendio/ca')
+            .end(function(err,res){
+                expect('Content-Type',/json/)
+                expect(res.text).to.equal("No existe tal mapa de incendio");
+                expect(400,done);
+                done();
+            });
+          
+    });
 });
