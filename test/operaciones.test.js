@@ -357,7 +357,13 @@ describe('Tests para operaciones con montañas', function(){
             });
         });
     
-    
+        it('Debería devolver que no existe dicha playa', function(done){
+            ops_playa.consultar('pep',predicciones,peticiones,function(res){
+                expect(res).to.equal("No existe tal playa");
+                done();
+            });
+        });
+
         it('Debería poder eliminar datos de playa', function(done){
             expect(ops_playa.eliminar('Calahonda')).to.not.throw;
             done();
@@ -451,6 +457,8 @@ describe('Tests para operaciones con incendios', function(){
             done();
         });
     });
+
+    
 
 
     it('Debería devolver un mensaje de que no existen dichos datos de incendio', function(done){
