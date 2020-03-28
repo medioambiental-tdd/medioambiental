@@ -18,9 +18,14 @@ Las historias de usuario del proyecto estan disponibles [aquí](https://github.c
 
 * Para testear las peticiones HTTP de la API utilizaremos [supertest](https://github.com/visionmedia/supertest).
 
-* Cómo herramienta de construcción usaremos [Grunt](https://gruntjs.com/).
+* Cómo herramienta de construcción usaremos [npm](https://www.npmjs.com/).
 
 * Para añadir integración continua al proyecto hemos elegido [Travis CI](https://travis-ci.org/).
+
+## Perfiles LinkedIn
+
+* [Víctor Peralta Cámara](https://www.linkedin.com/in/vperaltac/)  
+* [Javier López Domínguez](https://www.linkedin.com/in/javilecrin/)
 
 
 ## Autores
