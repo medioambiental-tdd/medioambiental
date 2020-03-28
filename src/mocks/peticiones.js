@@ -43,8 +43,8 @@ var datosMunicipio={
     json(){
         return  [ {
             "elaborado" : new Date().toJSON().slice(0,10),
-            "nombre" : "Granada",
-            "provincia" : "Granada",
+            "nombre" : "municipio_test",
+            "provincia" : "municipio_test",
             "prediccion" : {
               "dia" : [ {
                 "probPrecipitacion" : [ {

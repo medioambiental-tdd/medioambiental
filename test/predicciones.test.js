@@ -56,7 +56,7 @@ describe('Tests unitarios para las llamadas a APIs externas', function(){
         var hoy = new Date().toJSON().slice(0,10);
         
         expect(mm).to.be.an.instanceOf(MeteoMunicipio);
-        expect(mm.getNombreMunicipio()).to.equal("Granada");
+        expect(mm.getNombreMunicipio()).to.equal("municipio_test");
         expect(mm.getFecha()).to.equal(hoy);
         expect(mm.getEstadoCielo()).to.have.lengthOf(4);
         expect(mm.getProbPrecipitacion()).to.have.lengthOf(4);

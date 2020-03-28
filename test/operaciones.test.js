@@ -106,20 +106,13 @@ describe('Tests para operaciones con municipios', function(){
         expect(ops_municipio).to.exist
     });
 
+    it('Debería poder insertar datos de municipio', function(done){
+        expect(ops_municipio.consultar('municipio_test',predicciones,peticiones,function(mm){
 
-    it('Debería poder actualizar los datos de un municipio', function(done){
-        ops_municipio.actualizarDatos('Sevilla',predicciones,peticiones,function(mm){
-            expect(mm).to.be.an.instanceof(MeteoMunicipio);
-            done();
-        });
-    });
-
-    it('Debería poder comprobar datos de municipio', function(done){
-        expect(ops_municipio.consultar('Granada',predicciones,peticiones,function(mm){
-
+            console.log(mm.getNombreMunicipio());
             var hoy = new Date().toJSON().slice(0,10);            
             expect(mm).to.be.an.instanceOf(MeteoMunicipio);
-            expect(mm.getNombreMunicipio()).to.equal("Granada");
+            expect(mm.getNombreMunicipio()).to.equal("municipio_test");
             expect(mm.getFecha()).to.equal(hoy);
             expect(mm.getEstadoCielo()).to.have.lengthOf(4);
             expect(mm.getProbPrecipitacion()).to.have.lengthOf(4);
@@ -133,11 +126,11 @@ describe('Tests para operaciones con municipios', function(){
         })).to.not.throw;
     });
 
-    it('Debería poder comprobar datos de municipio', function(done){
-        expect(ops_municipio.consultar('Granada',predicciones,peticiones,function(mm){
+    it('Debería poder consultar datos de municipio', function(done){
+        expect(ops_municipio.consultar('municipio_test',predicciones,peticiones,function(mm){
             var hoy = new Date().toJSON().slice(0,10);            
             expect(mm).to.be.an.instanceOf(MeteoMunicipio);
-            expect(mm.getNombreMunicipio()).to.equal("Granada");
+            expect(mm.getNombreMunicipio()).to.equal("municipio_test");
             expect(mm.getFecha()).to.equal(hoy);
             expect(mm.getEstadoCielo()).to.have.lengthOf(4);
             expect(mm.getProbPrecipitacion()).to.have.lengthOf(4);
@@ -151,17 +144,35 @@ describe('Tests para operaciones con municipios', function(){
         })).to.not.throw;
     });
 
+    it('Debería poder actualizar datos de un municipio', function(done){
+        var nombre='municipio_test';
+        var fecha           = new Date();
+        fecha.setDate(fecha.getDate() - 1);
+        fecha = fecha.toJSON().slice(0,10);
 
-    it('Debería poder insertar un municipio',async function(){
-        ops_municipio.eliminar('Granada');
+        var probPrecipitacion=[0,0,100,5];
+        var cotaNieve=["","","2400",""];
+        var estadoCielo=["","Intervalos nubosos con lluvia","",""];
+        var temperatura=[9,18,17,11];
+        var sensTermica=[9,18,17,11];
+        var velocidadViento=[0,0,0,0];
+        var direccionViento=["N","N","W","N"];
+    
+        mm= new MeteoMunicipio(nombre,fecha,estadoCielo,probPrecipitacion,cotaNieve,temperatura,sensTermica,velocidadViento,direccionViento); 
 
+        ops_municipio.actualizar(mm,function(res){
+            expect(res).to.be.an.instanceof(MeteoMunicipio);
+            expect(res.getFecha()).to.equal(fecha);
 
-        var datos = await predicciones.get_prediccion_municipio('Granada',peticiones.get_datos_api_externa);
-        ops_municipio.insertar(datos,function(mm){
+            done();
+        });
+    });
 
+    it('Debería poder consultar datos de municipio', function(done){
+        expect(ops_municipio.consultar('municipio_test',predicciones,peticiones,function(mm){
             var hoy = new Date().toJSON().slice(0,10);            
             expect(mm).to.be.an.instanceOf(MeteoMunicipio);
-            expect(mm.getNombreMunicipio()).to.equal("Granada");
+            expect(mm.getNombreMunicipio()).to.equal("municipio_test");
             expect(mm.getFecha()).to.equal(hoy);
             expect(mm.getEstadoCielo()).to.have.lengthOf(4);
             expect(mm.getProbPrecipitacion()).to.have.lengthOf(4);
@@ -171,11 +182,15 @@ describe('Tests para operaciones con municipios', function(){
             expect(mm.getVelocidadViento()).to.have.lengthOf(4);
             expect(mm.getDireccionViento()).to.have.lengthOf(4);
 
-        });
-
-        ops_municipio.eliminar('Granada');
-        var datos = await predicciones.get_prediccion_municipio('Granada',peticiones.get_datos_api_externa);
+            done();
+        })).to.not.throw;
     });
+
+    it('Debería poder eliminar datos de montaña', function(done){
+        expect(ops_municipio.eliminar('municipio_test')).to.not.throw;
+        done();
+    });
+
 
     it('Debería indicar que un municipio no existe',function(done){
         ops_municipio.consultar('Arkham',predicciones,peticiones,function(mm){

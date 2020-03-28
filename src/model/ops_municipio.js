@@ -9,9 +9,23 @@ function consultar(municipio,predicciones,peticiones,callback){
         else{
             var fecha = new Date().toJSON().slice(0,10);
             if(rows[0]==null||fecha != rows[0].FECHA){
-                actualizarDatos(municipio,predicciones,peticiones,callback);
-                if(callback=='No existe tal municipio')
-                    return callback;
+                db.conn.all(`SELECT CPRO,CMUN FROM codMunicipios where nombre = ?`,[municipio],async (err,res)=>{
+                    if(err)
+                        throw err;
+                    else{
+                        if(res[0]==null)
+                            return callback('No existe tal municipio');
+
+                        var m=res[0].CPRO*1000+res[0].CMUN;
+                        var datos = await predicciones.get_prediccion_municipio(m,peticiones.get_datos_api_externa);
+                        var fecha = new Date().toJSON().slice(0,10);
+            
+                        if(rows[0] == null)
+                            insertar(datos,callback);
+                        else
+                            actualizar(datos,callback);
+                    }
+                });
             }else{
                 var eCielo = [rows[0].e1,rows[0].e2,rows[0].e3,rows[0].e4];
                 var pPrecip= [rows[0].p1,rows[0].p2,rows[0].p3,rows[0].p4];
@@ -24,26 +38,6 @@ function consultar(municipio,predicciones,peticiones,callback){
                 mm=new MeteoMunicipio(rows[0].NOMBRE,rows[0].FECHA,eCielo,pPrecip,cNieve,temp,sensT,vViento,dViento);
                 return callback(mm);
             }
-        }
-    });
-}
-
-function actualizarDatos(municipio,predicciones,peticiones,callback){
-    db.conn.all(`SELECT CPRO,CMUN FROM codMunicipios where nombre = ? `,[municipio],async (err,rows) =>{
-        if(err)
-            throw err;
-        else{
-            if(rows[0]==null)  
-                return callback('No existe tal municipio');
-                
-            var m=rows[0].CPRO*1000+rows[0].CMUN;
-            var datos = await predicciones.get_prediccion_municipio(m,peticiones.get_datos_api_externa);
-            var fecha = new Date().toJSON().slice(0,10);
-
-            if(rows[0].FECHA != fecha)
-                actualizar(datos,callback);
-            else
-                insertar(datos,callback);
         }
     });
 }
@@ -114,5 +108,4 @@ module.exports = {
     consultar,
     eliminar,
     insertar,
-    actualizarDatos
 }
